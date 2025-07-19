@@ -11,4 +11,10 @@ export class AdminService {
     deleteAdmin() {
         return { message: "Admin deleted successfully" };
     }
+    getAdminByNameAndId(name: string, id: number) {
+        return { message: `Admin info for ${name} with ID ${id}` };
+    }
+    addAdminBody(name: string, id: number) {
+        return { message: `Admin body added for ${name} with ID ${id}` };
+    }
 }
