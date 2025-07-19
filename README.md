@@ -1,98 +1,173 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Social E-commerce Marketplace
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A modern e-commerce platform built with NestJS that provides a social shopping experience with separate modules for users, sellers, and administrators.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Project Overview
 
-## Description
+This is a social e-commerce marketplace backend API built using NestJS framework. The platform is designed to support multiple user roles (users, sellers, and administrators) with a modular architecture for scalability and maintainability.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🏗️ Architecture
 
-## Project setup
+The project follows a modular architecture with separate modules for different user roles:
 
-```bash
-$ npm install
+- **User Module**: Handles customer operations (viewing products, making purchases, etc.)
+- **Seller Module**: Manages seller operations (product management, inventory, etc.)
+- **Admin Module**: Provides administrative functions (user management, platform oversight, etc.)
+
+## 📁 Project Structure
+
+```
+src/
+├── admin/                 # Admin module
+│   ├── admin.controller.ts
+│   ├── admin.services.ts
+│   └── admin.module.ts
+├── user/                  # User module
+│   ├── user.controller.ts
+│   ├── user.services.ts
+│   └── user.module.ts
+├── seller/                # Seller module (in development)
+│   ├── seller.controller.ts
+│   ├── seller.services.ts
+│   └── seller.module.ts
+├── app.module.ts          # Main application module
+└── main.ts               # Application entry point
 ```
 
-## Compile and run the project
+## 🛠️ Technology Stack
 
+- **Framework**: NestJS v11.0.1
+- **Language**: TypeScript
+- **Runtime**: Node.js
+- **Package Manager**: npm
+- **Testing**: Jest
+- **Code Quality**: ESLint, Prettier
+
+## 📋 Prerequisites
+
+Before running this project, make sure you have the following installed:
+
+- Node.js (v18 or higher)
+- npm (v8 or higher)
+
+## 🚀 Getting Started
+
+### Installation
+
+1. Clone the repository:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/rahulxiao/Social-E-Commerce-Marketplace.git
+cd social-e-commerce-marketplace
 ```
 
-## Run tests
-
+2. Install dependencies:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+### Running the Application
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+#### Development Mode
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+#### Production Mode
+```bash
+npm run build
+npm run start:prod
+```
 
-## Resources
+#### Debug Mode
+```bash
+npm run start:debug
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### Testing
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+# Unit tests
+npm run test
 
-## Support
+# Test coverage
+npm run test:cov
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# E2E tests
+npm run test:e2e
 
-## Stay in touch
+# Test watch mode
+npm run test:watch
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🌐 API Endpoints
 
-## License
+### Admin Endpoints
+- `GET /admin/getAdminInfo` - Get admin information
+- `POST /admin/createAdmin` - Create a new admin
+- `DELETE /admin/deleteAdmin` - Delete an admin
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### User Endpoints
+- `GET /user/getUserInfo` - Get user information
+- `POST /user/createUser` - Create a new user
+- `DELETE /user/deleteUser` - Delete a user
+
+### Seller Endpoints
+- Currently in development phase
+
+## 🔧 Configuration
+
+The application runs on port 3333 by default. You can change this by setting the `PORT` environment variable:
+
+```bash
+PORT=3333 npm run start:dev
+```
+
+## 📝 Available Scripts
+
+- `npm run build` - Build the application
+- `npm run start` - Start the application
+- `npm run start:dev` - Start in development mode with hot reload
+- `npm run start:debug` - Start in debug mode
+- `npm run start:prod` - Start in production mode
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run test` - Run unit tests
+- `npm run test:e2e` - Run end-to-end tests
+
+## 🏗️ Development Status
+
+### ✅ Completed
+- Basic NestJS project setup
+- Admin module with basic CRUD operations
+- User module with basic CRUD operations
+- Modular architecture implementation
+- Development environment configuration
+
+### 🚧 In Progress
+- Seller module implementation
+- Database integration
+- Authentication and authorization
+- API documentation
+
+### 📋 Planned Features
+- Product management system
+- Order processing
+- Payment integration
+- Social features (reviews, ratings, etc.)
+- Real-time notifications
+- Advanced search and filtering
+- Mobile API support
+
+
+## 📄 License
+
+This project is licensed under the UNLICENSED license.
+
+
+## 🙏 Acknowledgments
+
+- NestJS team for the amazing framework
+- The open-source community for various tools and libraries
+
+
+
