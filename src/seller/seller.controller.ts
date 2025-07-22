@@ -20,7 +20,7 @@ export class SellerController {
     updateSeller(@Body('id') id: number, @Body('name') name: string) {
         return this.sellerService.updateSeller(id, name);
     }
-    //Commit test
+    //Commit test  ogggaaa boooogaaa
 
     @Delete('deleteSeller')
     deleteSeller() {
