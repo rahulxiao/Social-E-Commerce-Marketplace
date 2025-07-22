@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post } from "@nestjs/common";
+import { Controller, Delete, Get, Post, Param } from "@nestjs/common";
 import { UserService } from "./user.services";
 
 @Controller('user')
@@ -15,5 +15,40 @@ export class UserController {
     @Delete('deleteUser')
     deleteUser() {
         return this.userService.createUser(); 
+    }
+
+    @Post('createPost')
+    createPost() {
+        return this.userService.createPost();
+    }
+
+    @Get('getPosts')
+    getPosts() {
+        return this.userService.getPosts();
+    }
+
+    @Delete('deletePost/:postId')
+    deletePost(@Param('postId') postId: string) {
+        return this.userService.deletePost(postId);
+    }
+
+    @Post('likePost/:postId')
+    likePost(@Param('postId') postId: string) {
+        return this.userService.likePost(postId);
+    }
+
+    @Post('unlikePost/:postId')
+    unlikePost(@Param('postId') postId: string) {
+        return this.userService.unlikePost(postId);
+    }
+
+    @Post('follow/:userId')
+    follow(@Param('userId') userId: string) {
+        return this.userService.follow(userId);
+    }
+
+    @Post('unfollow/:userId')
+    unfollow(@Param('userId') userId: string) {
+        return this.userService.unfollow(userId);
     }
 }

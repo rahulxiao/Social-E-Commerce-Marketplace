@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, Query } from "@nestjs/common";
 import { Get } from "@nestjs/common";
 import { AdminService } from "./admin.services";
 
@@ -15,7 +15,11 @@ export class AdminController {
     }
     @Delete('deleteAdmin')
     deleteAdmin() {
-        return this.adminService.createAdmin();         
+        return this.adminService.deleteAdmin();         
+    }
+    @Delete('deleteAdminById/:id')
+    deleteAdminById(@Param('id') id: string) {
+        return this.adminService.deleteAdminById(id);
     }
     //Test endpoint to check if the controller is working
      // This endpoint adds an admin body with name and id
