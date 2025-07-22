@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post } from "@nestjs/common";
+import { Controller, Delete, Get, Post, Query, Body } from "@nestjs/common";
 import { SellerService } from "./seller.services";
 
 @Controller('seller')
@@ -8,12 +8,22 @@ export class SellerController {
     getSellerInfo() {
         return this.sellerService.getSellerInfo();
     }
-    @Post('sellerUser')
+    @Get('getSellerById')
+    getSellerById(@Query('id') id: number) {
+        return this.sellerService.getSellerById(id);
+    }
+    @Post('CreateSeller')
     createSeller() {
         return this.sellerService.createSeller();
     }
+    @Post('updateSeller')
+    updateSeller(@Body('id') id: number, @Body('name') name: string) {
+        return this.sellerService.updateSeller(id, name);
+    }
+    //Commit test
+
     @Delete('deleteSeller')
-    deleteUser() {
-        return this.sellerService.createSeller(); 
+    deleteSeller() {
+        return this.sellerService.deleteSeller(); 
     }
 }
