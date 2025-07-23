@@ -16,9 +16,10 @@ import { CartService } from "./cart/cart.service";
 import { UserModule } from "./user/user.module";
 import { SellerController } from "./seller/seller.controller";
 import { SellerService } from "./seller/seller.services";
+import { SellerModule } from "./seller/seller.module";
 
 @Module({
-  imports: [ProductModule, CartModule, OrderModule,AdminModule,UserModule],
+  imports: [ProductModule, CartModule, OrderModule,AdminModule,UserModule,SellerModule],
   controllers: [AdminController,UserController,OrderController,CartController,ProductController,SellerController],
   providers: [AdminService, UserService,OrderService,CartService,ProductService,SellerService],
 })

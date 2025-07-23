@@ -7,4 +7,4 @@ import { SellerService } from './seller.services';
     controllers: [SellerController],
     providers: [SellerService],
 })
-export class UserModule {}
+export class SellerModule {}
