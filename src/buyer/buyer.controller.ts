@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Post, Param } from "@nestjs/common";
-import { UserService } from "./user.services";
+import { UserService } from "./buyer.services";
 
 @Controller('user')
 export class UserController {
