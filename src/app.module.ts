@@ -1,26 +1,33 @@
 import { Module } from "@nestjs/common";
-import { AdminController } from "./admin/admin.controller";
-import { AdminService } from "./admin/admin.services";
-import { UserController } from "./buyer/buyer.controller";
-import { UserService } from "./buyer/buyer.services";
-import { ProductController } from './product/product.controller';
-import { ProductService } from './product/product.service';
 import { ProductModule } from './product/product.module';
-import { OrderController } from "./order/order.controller";
 import { OrderModule } from './order/order.module';
 import { CartModule } from "./cart/cart.module";
-import { OrderService } from "./order/order.service";
 import { AdminModule } from "./admin/admin.module";
-import { CartController } from "./cart/cart.controller";
-import { CartService } from "./cart/cart.service";
+
 import { UserModule } from "./buyer/buyer.module";
-import { SellerController } from "./seller/seller.controller";
-import { SellerService } from "./seller/seller.services";
+
 import { SellerModule } from "./seller/seller.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
-  imports: [ProductModule, CartModule, OrderModule,AdminModule,UserModule,SellerModule],
-  controllers: [AdminController,UserController,OrderController,CartController,ProductController,SellerController],
-  providers: [AdminService, UserService,OrderService,CartService,ProductService,SellerService],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'rahulxiao',
+      database: 'trendora',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    ProductModule, 
+    CartModule, 
+    OrderModule,
+    AdminModule,
+    UserModule,
+    SellerModule
+  ],
+  
 })
 export class AppModule {}

@@ -1,35 +1,51 @@
-import { Body, Controller, Delete, Param, Post, Query } from "@nestjs/common";
-import { Get } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, Query, Get, Put, ParseIntPipe } from "@nestjs/common";
 import { AdminService } from "./admin.services";
+import { CreateAdminDto, UpdateAdminDto } from "./admin.dto";
 
 @Controller('admin')
 export class AdminController {
     constructor(private readonly adminService: AdminService) {}
+
     @Get('getAdminInfo')
-    getAdminInfo() {
-        return this.adminService.getAdminInfo();
+    async getAdminInfo() {
+        return await this.adminService.getAdminInfo();
     }
+
     @Post('createAdmin')
-    createAdmin() {
-        return this.adminService.createAdmin();
+    async createAdmin(@Body() adminData: CreateAdminDto) {
+        return await this.adminService.createAdmin(adminData);
     }
+
     @Delete('deleteAdmin')
-    deleteAdmin() {
-        return this.adminService.deleteAdmin();         
+    async deleteAdmin() {
+        return await this.adminService.deleteAdmin();         
     }
+
     @Delete('deleteAdminById/:id')
-    deleteAdminById(@Param('id') id: string) {
-        return this.adminService.deleteAdminById(id);
+    async deleteAdminById(@Param('id') id: string) {
+        return await this.adminService.deleteAdminById(id);
     }
-    //Test endpoint to check if the controller is working
-     // This endpoint adds an admin body with name and id
+
+    @Get('getAdminById/:id')
+    async getAdminById(@Param('id', ParseIntPipe) id: number) {
+        return await this.adminService.getAdminById(id);
+    }
+
+    @Put('updateAdmin/:id')
+    async updateAdmin(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateData: UpdateAdminDto
+    ) {
+        return await this.adminService.updateAdmin(id, updateData);
+    }
+
     @Post('addAdminBody')
-    addAdminBody(@Body('name') name: string, @Body('id') id: number) {
-        return this.adminService.addAdminBody(name, id);
+    async addAdminBody(@Body('name') name: string, @Body('id') id: number) {
+        return await this.adminService.addAdminBody(name, id);
     }
-    // This endpoint retrieves admin information based on name and id
+
     @Get('getAdminInfoByNameAndId')
-    getAdminByNameAndId(@Query('name') name: string, @Query('id') id: number) {
-        return this.adminService.getAdminByNameAndId(name, id);
+    async getAdminByNameAndId(@Query('name') name: string, @Query('id') id: number) {
+        return await this.adminService.getAdminByNameAndId(name, id);
     }
 }
