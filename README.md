@@ -180,7 +180,7 @@ npm run test:watch
 The application is configured to connect to PostgreSQL with the following settings:
 - **Host**: localhost
 - **Port**: 5432
-- **Database**: greenguest
+- **Database**: trendora
 - **Username**: postgres
 - **Password**: rahulxiao
 - **Synchronize**: true (auto-creates tables)
