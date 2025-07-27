@@ -37,7 +37,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main Street, City, State 12345\",\n    \"username\": \"johndoe\",\n    \"password\": \"password123\"\n}"
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main Street, City, State 12345\",\n    \"username\": \"johndoe\",\n    \"password\": \"password@123\",\n    \"dateOfBirth\": \"1990-05-15\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/admin/createAdmin",
@@ -49,7 +49,63 @@
 						"createAdmin"
 					]
 				},
-				"description": "Create a new admin with required fields"
+				"description": "Create a new admin with required fields. Password must contain at least one special character (@, #, $, or &). Date must be in ISO format (YYYY-MM-DD)."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Admin - Alternative Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"phone\": \"9876543210\",\n    \"address\": \"456 Oak Avenue, Town, State 54321\",\n    \"username\": \"janesmith\",\n    \"password\": \"secure#456\",\n    \"dateOfBirth\": \"1985-12-25\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "Create admin with different special character in password (#) and date of birth"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Admin - Invalid Date (Test)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"phone\": \"5555555555\",\n    \"address\": \"789 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser\",\n    \"password\": \"test@123\",\n    \"dateOfBirth\": \"invalid-date\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "Test date validation with invalid date format (should return validation error)"
 			},
 			"response": []
 		},
@@ -99,6 +155,64 @@
 					]
 				},
 				"description": "Update admin information by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Admin Password",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"newpassword$789\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/updateAdmin/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"updateAdmin",
+						"1"
+					]
+				},
+				"description": "Update admin password with special character ($)"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Admin Date of Birth",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dateOfBirth\": \"1992-08-20\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/updateAdmin/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"updateAdmin",
+						"1"
+					]
+				},
+				"description": "Update admin date of birth with valid ISO date format"
 			},
 			"response": []
 		},

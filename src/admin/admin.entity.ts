@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MinLength, IsOptional, IsDateString } from "class-validator";
 
 @Entity('admin')
 export class AdminEntity {
@@ -9,6 +9,9 @@ export class AdminEntity {
     @Column({ type: 'varchar', length: 100 })
     @IsNotEmpty()
     @IsString()
+    @Matches(/^[A-Za-z\s]+$/, {
+    message: 'Name must only contain letters and spaces (no numbers allowed)',
+    })
     name: string;
 
     @Column({ type: 'varchar', length: 255, unique: true })
@@ -40,7 +43,15 @@ export class AdminEntity {
     @IsNotEmpty()
     @IsString()
     @MinLength(8)
+    @Matches(/.*[@#$&].*/, {
+        message: 'Password must contain at least one special character (@, #, $, or &)',
+    })
     password: string;
+
+    @Column({ type: 'date', nullable: true })
+    @IsOptional()
+    @IsDateString()
+    dateOfBirth?: Date;
 
     @CreateDateColumn()
     createdAt: Date;

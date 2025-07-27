@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { AdminEntity } from "./admin.entity";
+import { CreateAdminDto, UpdateAdminDto } from "./admin.dto";
 
 @Injectable()
 export class AdminService {
@@ -27,9 +28,15 @@ export class AdminService {
         }
     }
 
-    async createAdmin(adminData: Partial<AdminEntity>) {
+    async createAdmin(adminData: CreateAdminDto) {
         try {
-            const admin = this.adminRepository.create(adminData);
+            // Convert dateOfBirth string to Date if provided
+            const processedData = {
+                ...adminData,
+                dateOfBirth: adminData.dateOfBirth ? new Date(adminData.dateOfBirth) : undefined
+            };
+            
+            const admin = this.adminRepository.create(processedData);
             const savedAdmin = await this.adminRepository.save(admin);
             return { 
                 success: true, 
@@ -44,6 +51,7 @@ export class AdminService {
             };
         }
     }
+
     async getAdminByNameAndId(name: string, id: number) {
         try {
             const admin = await this.adminRepository.findOne({ 
@@ -138,9 +146,15 @@ export class AdminService {
         }
     }
 
-    async updateAdmin(id: number, updateData: Partial<AdminEntity>) {
+    async updateAdmin(id: number, updateData: UpdateAdminDto) {
         try {
-            const result = await this.adminRepository.update(id, updateData);
+            // Convert dateOfBirth string to Date if provided
+            const processedData = {
+                ...updateData,
+                dateOfBirth: updateData.dateOfBirth ? new Date(updateData.dateOfBirth) : undefined
+            };
+            
+            const result = await this.adminRepository.update(id, processedData);
             if (result.affected && result.affected > 0) {
                 const updatedAdmin = await this.adminRepository.findOne({ 
                     where: { id } 
