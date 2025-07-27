@@ -16,11 +16,6 @@ export class AdminController {
         return await this.adminService.createAdmin(adminData);
     }
 
-    @Delete('deleteAdmin')
-    async deleteAdmin() {
-        return await this.adminService.deleteAdmin();         
-    }
-
     @Delete('deleteAdminById/:id')
     async deleteAdminById(@Param('id') id: string) {
         return await this.adminService.deleteAdminById(id);

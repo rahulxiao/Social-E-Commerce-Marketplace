@@ -44,23 +44,6 @@ export class AdminService {
             };
         }
     }
-
-    async deleteAdmin() {
-        try {
-            await this.adminRepository.clear();
-            return { 
-                success: true, 
-                message: "All admins deleted successfully" 
-            };
-        } catch (error) {
-            return { 
-                success: false, 
-                message: "Failed to delete admins", 
-                error: error.message 
-            };
-        }
-    }
-
     async getAdminByNameAndId(name: string, id: number) {
         try {
             const admin = await this.adminRepository.findOne({ 

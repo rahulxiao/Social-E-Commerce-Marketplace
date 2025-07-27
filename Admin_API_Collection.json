@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "admin-api-collection",
+		"name": "Admin API Collection",
+		"description": "Complete collection for testing all Admin API endpoints in the Social E-commerce Marketplace",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Admins",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/admin/getAdminInfo",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"getAdminInfo"
+					]
+				},
+				"description": "Retrieve all admin information from the database"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Admin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main Street, City, State 12345\",\n    \"username\": \"johndoe\",\n    \"password\": \"password123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "Create a new admin with required fields"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Admin by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/admin/getAdminById/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"getAdminById",
+						"1"
+					]
+				},
+				"description": "Retrieve admin information by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Admin",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Updated\",\n    \"email\": \"john.updated@example.com\",\n    \"phone\": \"9876543210\",\n    \"address\": \"456 Updated Street, New City, State 54321\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/updateAdmin/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"updateAdmin",
+						"1"
+					]
+				},
+				"description": "Update admin information by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Admin by ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/admin/deleteAdminById/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"deleteAdminById",
+						"1"
+					]
+				},
+				"description": "Delete a specific admin by ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete All Admins",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/admin/deleteAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"deleteAdmin"
+					]
+				},
+				"description": "Delete all admins from the database (⚠️ Use with caution)"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Admin Body (Test)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test Admin\",\n    \"id\": 999\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/addAdminBody",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"addAdminBody"
+					]
+				},
+				"description": "Test endpoint for adding admin with name and ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Admin by Name and ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/admin/getAdminInfoByNameAndId?name=John Doe&id=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"getAdminInfoByNameAndId"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "John Doe"
+						},
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Retrieve admin information by name and ID using query parameters"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3333",
+			"type": "string"
+		}
+	]
+} 
