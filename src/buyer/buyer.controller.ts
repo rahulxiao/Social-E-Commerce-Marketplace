@@ -1,54 +1,54 @@
 import { Controller, Delete, Get, Post, Param } from "@nestjs/common";
-import { UserService } from "./buyer.services";
+import { BuyerService } from "./buyer.services";
 
-@Controller('user')
-export class UserController {
-    constructor(private readonly userService: UserService) {}
-    @Get('getUserInfo')
-    getUserInfo() {
-        return this.userService.getUserInfo();
+@Controller('buyer')
+export class BuyerController {
+    constructor(private readonly buyerService: BuyerService) {}
+    @Get('getBuyerInfo')
+    getBuyerInfo() {
+        return this.buyerService.getBuyerInfo();
     }
-    @Post('createUser')
-    createUser() {
-        return this.userService.createUser();
+    @Post('createBuyer')
+    createBuyer() {
+        return this.buyerService.createBuyer();
     }
-    @Delete('deleteUser')
-    deleteUser() {
-        return this.userService.createUser(); 
+    @Delete('deleteBuyer')
+    deleteBuyer() {
+        return this.buyerService.deleteBuyer(); 
     }
 
     @Post('createPost')
     createPost() {
-        return this.userService.createPost();
+        return this.buyerService.createPost();
     }
 
     @Get('getPosts')
     getPosts() {
-        return this.userService.getPosts();
+        return this.buyerService.getPosts();
     }
 
     @Delete('deletePost/:postId')
     deletePost(@Param('postId') postId: string) {
-        return this.userService.deletePost(postId);
+        return this.buyerService.deletePost(postId);
     }
 
     @Post('likePost/:postId')
     likePost(@Param('postId') postId: string) {
-        return this.userService.likePost(postId);
+        return this.buyerService.likePost(postId);
     }
 
     @Post('unlikePost/:postId')
     unlikePost(@Param('postId') postId: string) {
-        return this.userService.unlikePost(postId);
+        return this.buyerService.unlikePost(postId);
     }
 
-    @Post('follow/:userId')
-    follow(@Param('userId') userId: string) {
-        return this.userService.follow(userId);
+    @Post('follow/:buyerId')
+    follow(@Param('buyerId') buyerId: string) {
+        return this.buyerService.follow(buyerId);
     }
 
-    @Post('unfollow/:userId')
-    unfollow(@Param('userId') userId: string) {
-        return this.userService.unfollow(userId);
+    @Post('unfollow/:buyerId')
+    unfollow(@Param('buyerId') buyerId: string) {
+        return this.buyerService.unfollow(buyerId);
     }
 }

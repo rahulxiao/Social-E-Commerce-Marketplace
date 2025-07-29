@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class UserService {
-    getUserInfo() {
-        return { message: "User information" };
+export class BuyerService {
+    getBuyerInfo() {
+        return { message: "Buyer information" };
     }
-    createUser() {
-        return { message: "User created successfully" };
+    createBuyer() {
+        return { message: "Buyer created successfully" };
     }
-    deleteUser() {
-        return { message: "User deleted successfully" };
+    deleteBuyer() {
+        return { message: "Buyer deleted successfully" };
     }
     createPost() {
         return { message: 'Post created successfully' };
@@ -26,10 +26,10 @@ export class UserService {
     unlikePost(postId: string) {
         return { message: `Unliked post with ID ${postId}` };
     }
-    follow(userId: string) {
-        return { message: `Followed user with ID ${userId}` };
+    follow(buyerId: string) {
+        return { message: `Followed buyer with ID ${buyerId}` };
     }
-    unfollow(userId: string) {
-        return { message: `Unfollowed user with ID ${userId}` };
+    unfollow(buyerId: string) {
+        return { message: `Unfollowed buyer with ID ${buyerId}` };
     }
 }

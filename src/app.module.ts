@@ -4,7 +4,7 @@ import { OrderModule } from './order/order.module';
 import { CartModule } from "./cart/cart.module";
 import { AdminModule } from "./admin/admin.module";
 
-import { UserModule } from "./buyer/buyer.module";
+import { BuyerModule } from "./buyer/buyer.module";
 
 import { SellerModule } from "./seller/seller.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -25,7 +25,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
     CartModule, 
     OrderModule,
     AdminModule,
-    UserModule,
+    BuyerModule,
     SellerModule
   ],
   

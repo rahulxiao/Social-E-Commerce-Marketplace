@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MinLength, IsOptional, IsDateString, IsUrl } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, Matches, MinLength, IsOptional, IsDateString } from "class-validator";
 
 @Entity('admin')
 export class AdminEntity {
