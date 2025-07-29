@@ -45,9 +45,5 @@ export class BuyerEntity {
     })
     bpassword: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
-
-    @UpdateDateColumn()
-    updatedAt: Date;
+    
 }
