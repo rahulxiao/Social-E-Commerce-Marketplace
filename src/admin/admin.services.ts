@@ -8,7 +8,7 @@ import { CreateAdminDto, UpdateAdminDto } from "./admin.dto";
 export class AdminService {
     constructor(
         @InjectRepository(AdminEntity)
-        private adminRepository: Repository<AdminEntity>
+        private readonly adminRepository: Repository<AdminEntity>
     ) {}
 
     async getAdminInfo() {
