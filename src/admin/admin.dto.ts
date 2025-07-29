@@ -1,4 +1,12 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, IsOptional, Matches, IsDateString } from 'class-validator';
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsString,
+    MinLength,
+    IsOptional,
+    Matches,
+    IsDateString,
+} from 'class-validator';
 
 export class CreateAdminDto {
     @IsNotEmpty()
@@ -32,13 +40,22 @@ export class CreateAdminDto {
     @IsString()
     @MinLength(8)
     @Matches(/.*[@#$&].*/, {
-        message: 'Password must contain at least one special character (@, #, $, or &)',
+        message:
+            'Password must contain at least one special character (@, #, $, or &)',
     })
     password: string;
 
     @IsOptional()
     @IsDateString()
     dateOfBirth?: string;
+
+    @IsOptional()
+    @Matches(/^https?:\/\/(www\.)?(facebook|twitter|linkedin|github)\.com\/[a-zA-Z0-9_\-./]+$/,
+        {
+            message: 'Only Facebook, Twitter, LinkedIn, or GitHub URLs are allowed',
+        },
+    )
+    socialMediaLink?: string;
 }
 
 export class UpdateAdminDto {
@@ -73,12 +90,20 @@ export class UpdateAdminDto {
     @IsString()
     @MinLength(8)
     @Matches(/.*[@#$&].*/, {
-        message: 'Password must contain at least one special character (@, #, $, or &)',
+        message:
+            'Password must contain at least one special character (@, #, $, or &)',
     })
     password?: string;
 
     @IsOptional()
     @IsDateString()
     dateOfBirth?: string;
-}
 
+    @IsOptional()
+    @Matches(/^https?:\/\/(www\.)?(facebook|twitter|linkedin|github)\.com\/[a-zA-Z0-9_\-./]+$/,
+        {
+            message: 'Only Facebook, Twitter, LinkedIn, or GitHub URLs are allowed',
+        },
+    )
+    socialMediaLink?: string;
+}

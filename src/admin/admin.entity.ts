@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MinLength, IsOptional, IsDateString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MinLength, IsOptional, IsDateString, IsUrl } from "class-validator";
 
 @Entity('admin')
 export class AdminEntity {
@@ -52,6 +52,15 @@ export class AdminEntity {
     @IsOptional()
     @IsDateString()
     dateOfBirth?: Date;
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    @IsOptional()
+    @Matches(/^https?:\/\/(www\.)?(facebook|twitter|linkedin|github)\.com\/[a-zA-Z0-9_\-./]+$/,
+        {
+            message: 'Only Facebook, Twitter, LinkedIn, or GitHub URLs are allowed',
+        },
+    )
+    socialMediaLink?: string;
 
     @CreateDateColumn()
     createdAt: Date;

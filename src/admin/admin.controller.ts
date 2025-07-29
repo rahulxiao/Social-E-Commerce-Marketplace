@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Post, Query, Get, Put, ParseIntPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, Query, Get, Put, ParseIntPipe, ValidationPipe } from "@nestjs/common";
 import { AdminService } from "./admin.services";
 import { CreateAdminDto, UpdateAdminDto } from "./admin.dto";
 
@@ -12,7 +12,7 @@ export class AdminController {
     }
 
     @Post('createAdmin')
-    async createAdmin(@Body() adminData: CreateAdminDto) {
+    async createAdmin(@Body(ValidationPipe) adminData: CreateAdminDto) {
         return await this.adminService.createAdmin(adminData);
     }
 
@@ -29,7 +29,7 @@ export class AdminController {
     @Put('updateAdmin/:id')
     async updateAdmin(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateData: UpdateAdminDto
+        @Body(ValidationPipe) updateData: UpdateAdminDto
     ) {
         return await this.adminService.updateAdmin(id, updateData);
     }

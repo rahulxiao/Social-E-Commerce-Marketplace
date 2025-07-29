@@ -26,7 +26,7 @@
 			"response": []
 		},
 		{
-			"name": "Create Admin",
+			"name": "Create Admin - GitHub (Valid)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -37,7 +37,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main Street, City, State 12345\",\n    \"username\": \"johndoe\",\n    \"password\": \"password@123\",\n    \"dateOfBirth\": \"1990-05-15\"\n}"
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Main Street, City, State 12345\",\n    \"username\": \"johndoe\",\n    \"password\": \"password@123\",\n    \"dateOfBirth\": \"1990-05-15\",\n    \"socialMediaLink\": \"https://github.com/johndoe\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/admin/createAdmin",
@@ -49,12 +49,12 @@
 						"createAdmin"
 					]
 				},
-				"description": "Create a new admin with required fields. Password must contain at least one special character (@, #, $, or &). Date must be in ISO format (YYYY-MM-DD)."
+				"description": "✅ VALID: GitHub link should work"
 			},
 			"response": []
 		},
 		{
-			"name": "Create Admin - Alternative Password",
+			"name": "Create Admin - Facebook (Valid)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -65,7 +65,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"phone\": \"9876543210\",\n    \"address\": \"456 Oak Avenue, Town, State 54321\",\n    \"username\": \"janesmith\",\n    \"password\": \"secure#456\",\n    \"dateOfBirth\": \"1985-12-25\"\n}"
+					"raw": "{\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"phone\": \"9876543210\",\n    \"address\": \"456 Oak Avenue, Town, State 54321\",\n    \"username\": \"janesmith\",\n    \"password\": \"secure#456\",\n    \"dateOfBirth\": \"1985-12-25\",\n    \"socialMediaLink\": \"https://facebook.com/janesmith\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/admin/createAdmin",
@@ -77,12 +77,12 @@
 						"createAdmin"
 					]
 				},
-				"description": "Create admin with different special character in password (#) and date of birth"
+				"description": "✅ VALID: Facebook link should work"
 			},
 			"response": []
 		},
 		{
-			"name": "Create Admin - Invalid Date (Test)",
+			"name": "Create Admin - LinkedIn (Valid)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -93,7 +93,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"phone\": \"5555555555\",\n    \"address\": \"789 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser\",\n    \"password\": \"test@123\",\n    \"dateOfBirth\": \"invalid-date\"\n}"
+					"raw": "{\n    \"name\": \"Bob Wilson\",\n    \"email\": \"bob.wilson@example.com\",\n    \"phone\": \"5551234567\",\n    \"address\": \"789 Pine Street, Village, State 67890\",\n    \"username\": \"bobwilson\",\n    \"password\": \"bob$789\",\n    \"dateOfBirth\": \"1988-03-10\",\n    \"socialMediaLink\": \"https://linkedin.com/in/bobwilson\"\n}"
 				},
 				"url": {
 					"raw": "{{base_url}}/admin/createAdmin",
@@ -105,7 +105,175 @@
 						"createAdmin"
 					]
 				},
-				"description": "Test date validation with invalid date format (should return validation error)"
+				"description": "✅ VALID: LinkedIn link should work"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Admin - Twitter (Valid)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Alice Brown\",\n    \"email\": \"alice.brown@example.com\",\n    \"phone\": \"4449876543\",\n    \"address\": \"321 Elm Road, Town, State 13579\",\n    \"username\": \"alicebrown\",\n    \"password\": \"alice@456\",\n    \"dateOfBirth\": \"1992-07-22\",\n    \"socialMediaLink\": \"https://twitter.com/alicebrown\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "✅ VALID: Twitter link should work"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Create Admin - Instagram (Invalid)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"phone\": \"5555555555\",\n    \"address\": \"789 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser\",\n    \"password\": \"test@123\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"socialMediaLink\": \"https://instagram.com/testuser\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "❌ INVALID: Instagram not allowed - should return validation error"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Create Admin - YouTube (Invalid)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test2@example.com\",\n    \"phone\": \"5555555556\",\n    \"address\": \"790 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser2\",\n    \"password\": \"test@456\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"socialMediaLink\": \"https://youtube.com/channel/testuser\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "❌ INVALID: YouTube not allowed - should return validation error"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Create Admin - TikTok (Invalid)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test3@example.com\",\n    \"phone\": \"5555555557\",\n    \"address\": \"791 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser3\",\n    \"password\": \"test@789\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"socialMediaLink\": \"https://tiktok.com/@testuser\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "❌ INVALID: TikTok not allowed - should return validation error"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Create Admin - Snapchat (Invalid)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test4@example.com\",\n    \"phone\": \"5555555558\",\n    \"address\": \"792 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser4\",\n    \"password\": \"test@012\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"socialMediaLink\": \"https://snapchat.com/add/testuser\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "❌ INVALID: Snapchat not allowed - should return validation error"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Create Admin - Pinterest (Invalid)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test5@example.com\",\n    \"phone\": \"5555555559\",\n    \"address\": \"793 Test Road, Test City, Test State 12345\",\n    \"username\": \"testuser5\",\n    \"password\": \"test@345\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"socialMediaLink\": \"https://pinterest.com/testuser\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/createAdmin",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"createAdmin"
+					]
+				},
+				"description": "❌ INVALID: Pinterest not allowed - should return validation error"
 			},
 			"response": []
 		},
@@ -213,6 +381,35 @@
 					]
 				},
 				"description": "Update admin date of birth with valid ISO date format"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Admin Social Media",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"socialMediaLink\": \"https://facebook.com/john.doe\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/admin/updateAdmin/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"admin",
+						"updateAdmin",
+						"1"
+					]
+				},
+				"description": "Update admin social media link with Facebook URL"
 			},
 			"response": []
 		},
