@@ -3,15 +3,15 @@ import { OrderService } from './order.service';
 
 @Controller('orders')
 export class OrderController {
-    constructor(private readonly orderService: OrderService) {}
+  constructor(private readonly orderService: OrderService) {}
 
-    @Post()
-    placeOrder() {
-        return this.orderService.placeOrder();
-    }
+  @Post()
+  placeOrder() {
+    return this.orderService.placeOrder();
+  }
 
-    @Get()
-    getOrders() {
-        return this.orderService.getOrders();
-    }
-} 
+  @Get()
+  getOrders() {
+    return this.orderService.getOrders();
+  }
+}

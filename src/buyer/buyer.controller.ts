@@ -67,7 +67,7 @@ export class BuyerController {
                 cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'pdf'), false);
             }
         },
-        limits: { fileSize: 50000 }, 
+        limits: { fileSize: 500000 }, 
         storage: diskStorage({
             destination: './uploads',
             filename: (req, file, cb) => {

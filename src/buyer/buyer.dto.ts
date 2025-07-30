@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, IsOptional, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  IsOptional,
+  Matches,
+} from 'class-validator';
 
 export class CreateBuyerDto {
   @IsNotEmpty()
@@ -30,7 +37,8 @@ export class CreateBuyerDto {
     message: 'Password must contain at least one lowercase letter',
   })
   @Matches(/.*[@#$&].*/, {
-    message: 'Password must contain at least one special character (@, #, $, or &)',
+    message:
+      'Password must contain at least one special character (@, #, $, or &)',
   })
   bpassword: string;
 }
@@ -65,7 +73,8 @@ export class UpdateBuyerDto {
     message: 'Password must contain at least one lowercase letter',
   })
   @Matches(/.*[@#$&].*/, {
-    message: 'Password must contain at least one special character (@, #, $, or &)',
+    message:
+      'Password must contain at least one special character (@, #, $, or &)',
   })
   bpassword?: string;
 }

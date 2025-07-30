@@ -5,8 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BuyerEntity } from './buyer.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([BuyerEntity])],
-    controllers: [BuyerController],
-    providers: [BuyerService],
+  imports: [TypeOrmModule.forFeature([BuyerEntity])],
+  controllers: [BuyerController],
+  providers: [BuyerService],
 })
 export class BuyerModule {}

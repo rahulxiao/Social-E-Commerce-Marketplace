@@ -1,13 +1,13 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
-import { CartModule } from "./cart/cart.module";
-import { AdminModule } from "./admin/admin.module";
+import { CartModule } from './cart/cart.module';
+import { AdminModule } from './admin/admin.module';
 
-import { BuyerModule } from "./buyer/buyer.module";
+import { BuyerModule } from './buyer/buyer.module';
 
-import { SellerModule } from "./seller/seller.module";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { SellerModule } from './seller/seller.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -16,18 +16,17 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'moinul',
+      password: 'rahulxiao',
       database: 'trendora',
       autoLoadEntities: true,
       synchronize: true,
     }),
-    ProductModule, 
-    CartModule, 
+    ProductModule,
+    CartModule,
     OrderModule,
     AdminModule,
     BuyerModule,
-    SellerModule
+    SellerModule,
   ],
-  
 })
 export class AppModule {}
