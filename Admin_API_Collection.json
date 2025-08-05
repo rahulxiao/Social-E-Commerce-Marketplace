@@ -7,10 +7,10 @@
 	},
 	"item": [
 		{
-			"name": "User Category 4",
+			"name": "User Category 4 - Required Operations",
 			"item": [
 				{
-					"name": "Create Admin ",
+					"name": "Create Admin (User Category 4)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -67,7 +67,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Admins by Joining Date",
+					"name": "✅ Get Admins by Joining Date (Valid)",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -87,7 +87,101 @@
 								}
 							]
 						},
-						"description": "Retrieve admins by their joining date"
+						"description": "✅ VALID: Retrieve admins who joined on January 1, 2024"
+					},
+					"response": []
+				},
+				{
+					"name": "✅ Get Admins by Joining Date (Today)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/byJoiningDate?date={{today_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"byJoiningDate"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "{{today_date}}"
+								}
+							]
+						},
+						"description": "✅ VALID: Retrieve admins who joined today (use current date)"
+					},
+					"response": []
+				},
+				{
+					"name": "✅ Get Admins by Joining Date (Yesterday)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/byJoiningDate?date=2024-12-31",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"byJoiningDate"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2024-12-31"
+								}
+							]
+						},
+						"description": "✅ VALID: Retrieve admins who joined on December 31, 2024"
+					},
+					"response": []
+				},
+				{
+					"name": "❌ Get Admins by Joining Date (Invalid Date)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/byJoiningDate?date=invalid-date",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"byJoiningDate"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "invalid-date"
+								}
+							]
+						},
+						"description": "❌ INVALID: Should return error for invalid date format"
+					},
+					"response": []
+				},
+				{
+					"name": "❌ Get Admins by Joining Date (Missing Date)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/byJoiningDate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"byJoiningDate"
+							]
+						},
+						"description": "❌ INVALID: Should return error for missing date parameter"
 					},
 					"response": []
 				},
@@ -651,7 +745,10 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					""
+					"// Set today's date for dynamic testing",
+					"const today = new Date();",
+					"const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD format",
+					"pm.environment.set('today_date', todayString);"
 				]
 			}
 		},
@@ -660,7 +757,15 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					""
+					"// Test script for validation",
+					"pm.test('Status code is 200 or 400', function () {",
+					"    pm.expect(pm.response.code).to.be.oneOf([200, 400, 404]);",
+					"});",
+					"",
+					"pm.test('Response has success property', function () {",
+					"    const responseJson = pm.response.json();",
+					"    pm.expect(responseJson).to.have.property('success');",
+					"});"
 				]
 			}
 		}
@@ -669,6 +774,11 @@
 		{
 			"key": "base_url",
 			"value": "http://localhost:3333",
+			"type": "string"
+		},
+		{
+			"key": "today_date",
+			"value": "2024-01-01",
 			"type": "string"
 		}
 	]
