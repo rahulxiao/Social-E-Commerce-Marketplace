@@ -17,7 +17,7 @@ import { CreateAdminDto, UpdateAdminDto, UpdateCountryDto } from './admin.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  // User Category 4 - Required Operations
+
   @Post('create')
   async createAdmin(@Body(ValidationPipe) adminData: CreateAdminDto) {
     return await this.adminService.createAdmin(adminData);
@@ -33,8 +33,26 @@ export class AdminController {
 
   @Get('byJoiningDate')
   async getAdminsByJoiningDate(@Query('date') date: string) {
-    const joiningDate = new Date(date);
-    return await this.adminService.getAdminsByJoiningDate(joiningDate);
+    try {
+      // Parse the date string
+      const joiningDate = new Date(date);
+      
+      // Check if the date is valid
+      if (isNaN(joiningDate.getTime())) {
+        return {
+          success: false,
+          message: 'Invalid date format. Please use YYYY-MM-DD format (e.g., 2024-01-01)',
+        };
+      }
+      
+      return await this.adminService.getAdminsByJoiningDate(joiningDate);
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to parse date parameter',
+        error: error.message,
+      };
+    }
   }
 
   @Get('defaultCountry')

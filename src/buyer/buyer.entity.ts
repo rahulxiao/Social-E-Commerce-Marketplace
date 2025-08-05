@@ -1,21 +1,5 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  BeforeInsert,
-} from 'typeorm';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Matches,
-  MinLength,
-  IsOptional,
-  IsBoolean,
-} from 'class-validator';
+import {Column,Entity,PrimaryGeneratedColumn,CreateDateColumn,UpdateDateColumn,BeforeInsert,} from 'typeorm';
+import {IsEmail,IsNotEmpty,IsString, Matches,MinLength,IsOptional,IsBoolean,} from 'class-validator';
 
 @Entity('buyer')
 export class BuyerEntity {
@@ -34,10 +18,13 @@ export class BuyerEntity {
   })
   fullName: string;
 
-  @Column({ type: 'bigint', unsigned: true })
+  @Column({ type: 'varchar', length: 20 })
   @IsNotEmpty()
-  @IsNumber()
-  phone: number;
+  @IsString()
+  @Matches(/^01\d+$/, {
+    message: 'Phone number must start with "01" and contain only digits',
+  })
+  phone: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   @IsEmail()

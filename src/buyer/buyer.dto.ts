@@ -5,7 +5,6 @@ import {
   MinLength,
   IsOptional,
   Matches,
-  IsNumber,
   IsBoolean,
 } from 'class-validator';
 
@@ -18,8 +17,11 @@ export class CreateBuyerDto {
   fullName?: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  phone: number;
+  @IsString()
+  @Matches(/^01\d+$/, {
+    message: 'Phone number must start with "01" and contain only digits',
+  })
+  phone: string;
 
   @IsEmail()
   @IsNotEmpty()
@@ -51,8 +53,11 @@ export class UpdateBuyerDto {
   fullName?: string;
 
   @IsOptional()
-  @IsNumber()
-  phone?: number;
+  @IsString()
+  @Matches(/^01\d+$/, {
+    message: 'Phone number must start with "01" and contain only digits',
+  })
+  phone?: string;
 
   @IsOptional()
   @IsEmail()
@@ -77,6 +82,9 @@ export class UpdateBuyerDto {
 
 export class UpdatePhoneDto {
   @IsNotEmpty()
-  @IsNumber()
-  phone: number;
+  @IsString()
+  @Matches(/^01\d+$/, {
+    message: 'Phone number must start with "01" and contain only digits',
+  })
+  phone: string;
 }

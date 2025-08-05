@@ -1,14 +1,10 @@
 import {Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn} from 'typeorm';
-import {IsEmail, IsNotEmpty, IsString, Matches, MinLength, IsOptional, IsDateString, IsUUID} from 'class-validator';
+import {IsEmail, IsNotEmpty, IsString, Matches, MinLength, IsOptional, IsDateString} from 'class-validator';
 
 @Entity('admin')
 export class AdminEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column({ type: 'varchar', length: 150, unique: true })
-  @IsUUID()
-  uniqueId: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   joiningDate: Date;

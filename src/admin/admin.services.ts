@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Equal } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { AdminEntity } from './admin.entity';
 import { CreateAdminDto, UpdateAdminDto, UpdateCountryDto } from './admin.dto';
 
@@ -66,13 +66,22 @@ export class AdminService {
   // Retrieve users by their joining date
   async getAdminsByJoiningDate(joiningDate: Date) {
     try {
+      // Create start and end of the day for the given date
+      const startOfDay = new Date(joiningDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      
+      const endOfDay = new Date(joiningDate);
+      endOfDay.setHours(23, 59, 59, 999);
+      
       const admins = await this.adminRepository.find({
-        where: { joiningDate: Equal(joiningDate) }
+        where: { 
+          joiningDate: Between(startOfDay, endOfDay)
+        }
       });
       
       return {
         success: true,
-        message: 'Admins retrieved by joining date successfully',
+        message: `Admins retrieved by joining date ${joiningDate.toDateString()} successfully`,
         count: admins.length,
         data: admins,
       };

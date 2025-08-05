@@ -7,10 +7,10 @@
 	},
 	"item": [
 		{
-			"name": "User Category 4 - Required Operations",
+			"name": "User Category 4",
 			"item": [
 				{
-					"name": "Create Admin (User Category 4)",
+					"name": "Create Admin ",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"uniqueId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"name\": \"John Admin\",\n    \"email\": \"john.admin@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Admin Street, City, State 12345\",\n    \"username\": \"johnadmin\",\n    \"password\": \"admin@123\",\n    \"country\": \"USA\",\n    \"dateOfBirth\": \"1990-05-15\",\n    \"socialMediaLink\": \"https://github.com/johnadmin\"\n}"
+							"raw": "{\n    \"name\": \"John Admin\",\n    \"email\": \"john.admin@example.com\",\n    \"phone\": \"1234567890\",\n    \"address\": \"123 Admin Street, City, State 12345\",\n    \"username\": \"johnadmin\",\n    \"password\": \"admin@123\",\n    \"country\": \"USA\",\n    \"dateOfBirth\": \"1990-05-15\",\n    \"socialMediaLink\": \"https://github.com/johnadmin\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/admin/create",
@@ -33,7 +33,7 @@
 								"create"
 							]
 						},
-						"description": "Create admin with User Category 4 fields (uniqueId, joiningDate, country)"
+						"description": "Create admin with User Category 4 fields (joiningDate, country)"
 					},
 					"response": []
 				},

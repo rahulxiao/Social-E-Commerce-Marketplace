@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res, Body, HttpException, HttpStatus, Put } from "@nestjs/common";
+import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res, Body, HttpException, HttpStatus, Put, ValidationPipe } from "@nestjs/common";
 import { BuyerService } from "./buyer.services";
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -8,31 +8,26 @@ import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto } from './buyer.dto';
 export class BuyerController {
     constructor(private readonly buyerService: BuyerService) {}
 
-    // Create a user
     @Post('create')
-    createBuyer(@Body() createBuyerDto: CreateBuyerDto) {
+    createBuyer(@Body(ValidationPipe) createBuyerDto: CreateBuyerDto) {
         return this.buyerService.createBuyer(createBuyerDto);
     }
 
-    // Modify the phone number of an existing user
     @Put('updatePhone/:id')
-    updatePhone(@Param('id') id: number, @Body() updatePhoneDto: UpdatePhoneDto) {
+    updatePhone(@Param('id') id: number, @Body(ValidationPipe) updatePhoneDto: UpdatePhoneDto) {
         return this.buyerService.updatePhone(id, updatePhoneDto);
     }
 
-    // Retrieve users with null values in the full name column
     @Get('nullFullName')
     getBuyersWithNullFullName() {
         return this.buyerService.getBuyersWithNullFullName();
     }
 
-    // Remove a user from the system based on their id
     @Delete('remove/:id')
     removeBuyer(@Param('id') id: number) {
         return this.buyerService.removeBuyer(id);
     }
 
-    // Additional endpoints for general operations
     @Get('all')
     getAllBuyers() {
         return this.buyerService.getAllBuyers();
