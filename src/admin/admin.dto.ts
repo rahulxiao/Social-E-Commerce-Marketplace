@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsString, IsOptional, IsDateString, Matches, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsOptional, IsDateString, Matches } from 'class-validator';
 
 export class CreateAdminDto {
   @IsNotEmpty()
