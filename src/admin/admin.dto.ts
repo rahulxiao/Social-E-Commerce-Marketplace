@@ -57,6 +57,10 @@ export class CreateAdminDto {
     },
   )
   socialMediaLink?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
 }
 
 export class UpdateAdminDto {
@@ -108,4 +112,14 @@ export class UpdateAdminDto {
     },
   )
   socialMediaLink?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+}
+
+export class UpdateCountryDto {
+  @IsNotEmpty()
+  @IsString()
+  country: string;
 }

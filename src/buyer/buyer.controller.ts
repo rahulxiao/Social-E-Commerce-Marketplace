@@ -1,8 +1,7 @@
 import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res, Body, HttpException, HttpStatus, Put } from "@nestjs/common";
 import { BuyerService } from "./buyer.services";
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterError } from 'multer';
-import { diskStorage } from 'multer';
+import { MulterError, diskStorage } from 'multer';
 import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto } from './buyer.dto';
 
 @Controller('buyer')

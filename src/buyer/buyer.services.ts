@@ -8,7 +8,7 @@ import { BuyerEntity } from "./buyer.entity";
 export class BuyerService {
     constructor(
         @InjectRepository(BuyerEntity)
-        private buyerRepository: Repository<BuyerEntity>
+        private readonly buyerRepository: Repository<BuyerEntity>
     ) {}
 
     // Create a user
