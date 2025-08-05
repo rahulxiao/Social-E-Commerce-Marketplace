@@ -67,7 +67,52 @@
               "host": ["{{baseUrl}}"],
               "path": ["buyer", "nullFullName"]
             }
-          }
+          },
+          "description": "Retrieve all buyers who have null values in the fullName column"
+        },
+        {
+          "name": "Create Buyer with Null FullName",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"01123456789\",\n  \"bemail\": \"null.name@example.com\",\n  \"busername\": \"nullnameuser\",\n  \"bpassword\": \"password123\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          },
+          "description": "Create a buyer without providing fullName (should be null)"
+        },
+        {
+          "name": "Create Buyer with Empty FullName",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"\",\n  \"phone\": \"01123456790\",\n  \"bemail\": \"empty.name@example.com\",\n  \"busername\": \"emptynameuser\",\n  \"bpassword\": \"password123\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          },
+          "description": "Create a buyer with empty fullName string (should be stored as null)"
         },
         {
           "name": "Remove Buyer by ID",

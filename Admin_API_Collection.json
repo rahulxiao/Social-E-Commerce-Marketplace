@@ -33,7 +33,7 @@
 								"create"
 							]
 						},
-						"description": "Create admin with User Category 4 fields (joiningDate, country)"
+						"description": "Create admin with User Category 4 fields (uniqueId auto-generated, joiningDate, country)"
 					},
 					"response": []
 				},
@@ -201,6 +201,146 @@
 							]
 						},
 						"description": "Retrieve admins with the default country value ('Unknown')"
+					},
+					"response": []
+				},
+				{
+					"name": "✅ Verify UniqueId Auto-Generation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test UniqueId Admin\",\n    \"email\": \"uniqueid.test@example.com\",\n    \"phone\": \"5551234567\",\n    \"address\": \"456 UniqueId Street, Test City, State 12345\",\n    \"username\": \"uniqueidtest\",\n    \"password\": \"test@123\",\n    \"country\": \"Test Country\",\n    \"dateOfBirth\": \"1995-10-20\",\n    \"socialMediaLink\": \"https://github.com/uniqueidtest\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"create"
+							]
+						},
+						"description": "✅ TEST: Verify that uniqueId is automatically generated as UUID when creating admin"
+					},
+					"response": []
+				},
+				{
+					"name": "✅ Create Admin - Valid Username (Letters & Numbers)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Valid Username Admin\",\n    \"email\": \"valid.username@example.com\",\n    \"phone\": \"5551234568\",\n    \"address\": \"789 Valid Street, Test City, State 12345\",\n    \"username\": \"validuser123\",\n    \"password\": \"test@123\",\n    \"country\": \"Test Country\",\n    \"dateOfBirth\": \"1990-05-15\",\n    \"socialMediaLink\": \"https://github.com/validuser123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"create"
+							]
+						},
+						"description": "✅ VALID: Username with letters and numbers should work"
+					},
+					"response": []
+				},
+				{
+					"name": "✅ Create Admin - Valid Username (With Underscore)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Underscore Username Admin\",\n    \"email\": \"underscore.user@example.com\",\n    \"phone\": \"5551234569\",\n    \"address\": \"321 Underscore Street, Test City, State 12345\",\n    \"username\": \"user_name_123\",\n    \"password\": \"test@123\",\n    \"country\": \"Test Country\",\n    \"dateOfBirth\": \"1988-12-25\",\n    \"socialMediaLink\": \"https://github.com/user_name_123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"create"
+							]
+						},
+						"description": "✅ VALID: Username with underscore should work"
+					},
+					"response": []
+				},
+				{
+					"name": "❌ Create Admin - Invalid Username (With Hyphen)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Invalid Username Admin\",\n    \"email\": \"invalid.username@example.com\",\n    \"phone\": \"5551234570\",\n    \"address\": \"654 Invalid Street, Test City, State 12345\",\n    \"username\": \"user-name-123\",\n    \"password\": \"test@123\",\n    \"country\": \"Test Country\",\n    \"dateOfBirth\": \"1992-08-10\",\n    \"socialMediaLink\": \"https://github.com/user-name-123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"create"
+							]
+						},
+						"description": "❌ INVALID: Username with hyphen should return validation error"
+					},
+					"response": []
+				},
+				{
+					"name": "❌ Create Admin - Invalid Username (With Special Characters)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Special Char Username Admin\",\n    \"email\": \"special.char@example.com\",\n    \"phone\": \"5551234571\",\n    \"address\": \"987 Special Street, Test City, State 12345\",\n    \"username\": \"user@name#123\",\n    \"password\": \"test@123\",\n    \"country\": \"Test Country\",\n    \"dateOfBirth\": \"1985-03-20\",\n    \"socialMediaLink\": \"https://github.com/user@name#123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"create"
+							]
+						},
+						"description": "❌ INVALID: Username with special characters should return validation error"
 					},
 					"response": []
 				}
@@ -765,7 +905,18 @@
 					"pm.test('Response has success property', function () {",
 					"    const responseJson = pm.response.json();",
 					"    pm.expect(responseJson).to.have.property('success');",
-					"});"
+					"});",
+					"",
+					"// Test uniqueId format for admin creation",
+					"if (pm.request.url.path.includes('/admin/create') && pm.response.code === 200) {",
+					"    pm.test('UniqueId is generated as valid UUID', function () {",
+					"        const responseJson = pm.response.json();",
+					"        if (responseJson.data && responseJson.data.uniqueId) {",
+					"            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;",
+					"            pm.expect(responseJson.data.uniqueId).to.match(uuidRegex);",
+					"        }",
+					"    });",
+					"}"
 				]
 			}
 		}

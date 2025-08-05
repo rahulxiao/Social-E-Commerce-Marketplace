@@ -1,12 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-  IsOptional,
-  Matches,
-  IsDateString,
-} from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsOptional, IsDateString, Matches, IsUUID } from 'class-validator';
 
 export class CreateAdminDto {
   @IsNotEmpty()
@@ -16,8 +8,8 @@ export class CreateAdminDto {
   })
   name: string;
 
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsNotEmpty()
@@ -30,37 +22,32 @@ export class CreateAdminDto {
 
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'Username must only contain letters, numbers, and underscores (no special characters allowed)',
+  })
   username: string;
-
-  @IsOptional()
-  @IsString()
-  role?: string;
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
-  @Matches(/.*[@#$&].*/, {
-    message:
-      'Password must contain at least one special character (@, #, $, or &)',
+  @Matches(/^(?=.*[a-z])(?=.*[@#$&])/, {
+    message: 'Password must contain at least one lowercase letter and one special character (@#$&)',
   })
   password: string;
 
   @IsOptional()
-  @IsDateString()
-  dateOfBirth?: string;
-
-  @IsOptional()
-  @Matches(
-    /^https?:\/\/(www\.)?(facebook|twitter|linkedin|github)\.com\/[a-zA-Z0-9_\-./]+$/,
-    {
-      message: 'Only Facebook, Twitter, LinkedIn, or GitHub URLs are allowed',
-    },
-  )
-  socialMediaLink?: string;
-
-  @IsOptional()
   @IsString()
   country?: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  dateOfBirth: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Matches(/^https:\/\/(github\.com|facebook\.com|linkedin\.com|twitter\.com)\/.+/, {
+    message: 'Social media link must be a valid GitHub, Facebook, LinkedIn, or Twitter URL',
+  })
+  socialMediaLink: string;
 }
 
 export class UpdateAdminDto {
@@ -85,37 +72,32 @@ export class UpdateAdminDto {
 
   @IsOptional()
   @IsString()
+  @Matches(/^[a-zA-Z0-9_]+$/, {
+    message: 'Username must only contain letters, numbers, and underscores (no special characters allowed)',
+  })
   username?: string;
 
   @IsOptional()
   @IsString()
-  role?: string;
+  @Matches(/^(?=.*[a-z])(?=.*[@#$&])/, {
+    message: 'Password must contain at least one lowercase letter and one special character (@#$&)',
+  })
+  password?: string;
 
   @IsOptional()
   @IsString()
-  @MinLength(8)
-  @Matches(/.*[@#$&].*/, {
-    message:
-      'Password must contain at least one special character (@, #, $, or &)',
-  })
-  password?: string;
+  country?: string;
 
   @IsOptional()
   @IsDateString()
   dateOfBirth?: string;
 
   @IsOptional()
-  @Matches(
-    /^https?:\/\/(www\.)?(facebook|twitter|linkedin|github)\.com\/[a-zA-Z0-9_\-./]+$/,
-    {
-      message: 'Only Facebook, Twitter, LinkedIn, or GitHub URLs are allowed',
-    },
-  )
-  socialMediaLink?: string;
-
-  @IsOptional()
   @IsString()
-  country?: string;
+  @Matches(/^https:\/\/(github\.com|facebook\.com|linkedin\.com|twitter\.com)\/.+/, {
+    message: 'Social media link must be a valid GitHub, Facebook, LinkedIn, or Twitter URL',
+  })
+  socialMediaLink?: string;
 }
 
 export class UpdateCountryDto {

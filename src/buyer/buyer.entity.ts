@@ -16,7 +16,7 @@ export class BuyerEntity {
   @Matches(/^[A-Za-z\s]+$/, {
     message: 'Full name must only contain letters and spaces (no numbers allowed)',
   })
-  fullName: string;
+  fullName?: string;
 
   @Column({ type: 'varchar', length: 20 })
   @IsNotEmpty()

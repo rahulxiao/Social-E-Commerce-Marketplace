@@ -13,15 +13,29 @@ export class BuyerService {
 
     // Create a user
     async createBuyer(createBuyerDto: CreateBuyerDto) {
-        const buyer = this.buyerRepository.create({
-            ...createBuyerDto,
-            isActive: createBuyerDto.isActive ?? true
-        });
-        const savedBuyer = await this.buyerRepository.save(buyer);
-        return { 
-            message: "Buyer created successfully",
-            data: savedBuyer
-        };
+        try {
+            // Convert empty fullName to null
+            const processedData = {
+                ...createBuyerDto,
+                fullName: createBuyerDto.fullName?.trim() || undefined,
+                isActive: createBuyerDto.isActive ?? true
+            };
+
+            const buyer = this.buyerRepository.create(processedData);
+            const savedBuyer = await this.buyerRepository.save(buyer);
+            
+            return { 
+                success: true,
+                message: "Buyer created successfully",
+                data: savedBuyer
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: "Failed to create buyer",
+                error: error.message
+            };
+        }
     }
 
     // Modify the phone number of an existing user
@@ -42,15 +56,24 @@ export class BuyerService {
 
     // Retrieve users with null values in the full name column
     async getBuyersWithNullFullName() {
-        const buyers = await this.buyerRepository.find({
-            where: { fullName: IsNull() }
-        });
-        
-        return {
-            message: "Buyers with null full name retrieved successfully",
-            count: buyers.length,
-            data: buyers
-        };
+        try {
+            const buyers = await this.buyerRepository.find({
+                where: { fullName: IsNull() }
+            });
+            
+            return {
+                success: true,
+                message: "Buyers with null full name retrieved successfully",
+                count: buyers.length,
+                data: buyers
+            };
+        } catch (error) {
+            return {
+                success: false,
+                message: "Failed to retrieve buyers with null full name",
+                error: error.message
+            };
+        }
     }
 
     // Remove a user from the system based on their id

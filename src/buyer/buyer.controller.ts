@@ -19,8 +19,16 @@ export class BuyerController {
     }
 
     @Get('nullFullName')
-    getBuyersWithNullFullName() {
-        return this.buyerService.getBuyersWithNullFullName();
+    async getBuyersWithNullFullName() {
+        try {
+            return await this.buyerService.getBuyersWithNullFullName();
+        } catch (error) {
+            return {
+                success: false,
+                message: "Failed to retrieve buyers with null full name",
+                error: error.message
+            };
+        }
     }
 
     @Delete('remove/:id')
@@ -43,7 +51,6 @@ export class BuyerController {
         return this.buyerService.updateBuyer(id, updateBuyerDto);
     }
 
-    // Legacy endpoints for compatibility
     @Get('getBuyerInfo')
     getBuyerInfo() {
         return this.buyerService.getBuyerInfo();
@@ -56,9 +63,8 @@ export class BuyerController {
 
     @Post('updateBuyer')
     updateBuyerLegacy(@Body() updateBuyerDto: UpdateBuyerDto) {
-        // Note: This legacy endpoint requires id to be passed in the body
-        // For proper usage, use PUT /buyer/update/:id instead
-        return this.buyerService.updateBuyer(1, updateBuyerDto); // Default to ID 1 for legacy compatibility
+       
+        return this.buyerService.updateBuyer(1, updateBuyerDto); 
     }
 
     @Delete('deleteBuyer')
@@ -111,24 +117,20 @@ export class BuyerController {
             },
         }),
         fileFilter: (req, file, cb) => {
-            // Check if file exists
             if (!file) {
                 return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'No file uploaded'), false);
             }
             
-            // Check file extension
             const isPdfExtension = file.originalname.toLowerCase().endsWith('.pdf');
             if (!isPdfExtension) {
                 return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'Only PDF files are allowed'), false);
             }
             
-            // Check MIME type for additional security
             const isPdfMimeType = file.mimetype === 'application/pdf';
             if (!isPdfMimeType) {
                 return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'Invalid file type. Only PDF files are allowed'), false);
             }
             
-            // File is valid, allow upload
             cb(null, true);
         },
         limits: { 
@@ -142,7 +144,6 @@ export class BuyerController {
                 throw new HttpException('No file uploaded. Please select a PDF file.', HttpStatus.BAD_REQUEST);
             }
             
-            // Additional validation (redundant but safe)
             const isPdfExtension = file.originalname.toLowerCase().endsWith('.pdf');
             const isPdfMimeType = file.mimetype === 'application/pdf';
             
