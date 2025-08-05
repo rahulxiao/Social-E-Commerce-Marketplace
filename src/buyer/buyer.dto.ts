@@ -5,26 +5,25 @@ import {
   MinLength,
   IsOptional,
   Matches,
+  IsNumber,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateBuyerDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message: 'Name must only contain letters and spaces (no numbers allowed)',
+    message: 'Full name must only contain letters and spaces (no numbers allowed)',
   })
-  bname: string;
+  fullName?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  phone: number;
 
   @IsEmail()
   @IsNotEmpty()
   bemail: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Matches(/^01\d+$/, {
-    message: 'Phone number must start with "01" and contain only digits',
-  })
-  bphone: string;
 
   @IsNotEmpty()
   @IsString()
@@ -36,31 +35,28 @@ export class CreateBuyerDto {
   @Matches(/.*[a-z].*/, {
     message: 'Password must contain at least one lowercase letter',
   })
-  @Matches(/.*[@#$&].*/, {
-    message:
-      'Password must contain at least one special character (@, #, $, or &)',
-  })
   bpassword: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }
 
 export class UpdateBuyerDto {
   @IsOptional()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message: 'Name must only contain letters and spaces (no numbers allowed)',
+    message: 'Full name must only contain letters and spaces (no numbers allowed)',
   })
-  bname?: string;
+  fullName?: string;
+
+  @IsOptional()
+  @IsNumber()
+  phone?: number;
 
   @IsOptional()
   @IsEmail()
   bemail?: string;
-
-  @IsOptional()
-  @IsString()
-  @Matches(/^01\d+$/, {
-    message: 'Phone number must start with "01" and contain only digits',
-  })
-  bphone?: string;
 
   @IsOptional()
   @IsString()
@@ -72,9 +68,15 @@ export class UpdateBuyerDto {
   @Matches(/.*[a-z].*/, {
     message: 'Password must contain at least one lowercase letter',
   })
-  @Matches(/.*[@#$&].*/, {
-    message:
-      'Password must contain at least one special character (@, #, $, or &)',
-  })
   bpassword?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+
+export class UpdatePhoneDto {
+  @IsNotEmpty()
+  @IsNumber()
+  phone: number;
 }

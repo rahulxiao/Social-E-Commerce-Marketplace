@@ -1,19 +1,5 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MinLength,
-  IsOptional,
-  IsDateString,
-} from 'class-validator';
+import {Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn,} from 'typeorm';
+import {IsEmail, IsNotEmpty, IsString, Matches, MinLength, IsOptional, IsDateString,} from 'class-validator';
 
 @Entity('admin')
 export class AdminEntity {
