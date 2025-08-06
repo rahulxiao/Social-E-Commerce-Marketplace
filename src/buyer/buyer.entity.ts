@@ -1,10 +1,15 @@
 import {Column,Entity,PrimaryGeneratedColumn,CreateDateColumn,UpdateDateColumn,BeforeInsert,} from 'typeorm';
-import {IsEmail,IsNotEmpty,IsString, Matches,MinLength,IsOptional,IsBoolean,} from 'class-validator';
+import {IsEmail,IsNotEmpty,IsString, Matches,MinLength,IsOptional,IsBoolean,IsUUID,IsNumber,IsPositive,} from 'class-validator';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('buyer')
 export class BuyerEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'varchar', length: 150, unique: true })
+  @IsUUID()
+  uniqueId: string;
 
   @Column({ type: 'boolean', default: true })
   @IsBoolean()
@@ -18,13 +23,11 @@ export class BuyerEntity {
   })
   fullName?: string;
 
-  @Column({ type: 'varchar', length: 20 })
+  @Column({ type: 'bigint', unsigned: true })
   @IsNotEmpty()
-  @IsString()
-  @Matches(/^01\d+$/, {
-    message: 'Phone number must start with "01" and contain only digits',
-  })
-  phone: string;
+  @IsNumber()
+  @IsPositive()
+  phone: number;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   @IsEmail()
@@ -53,7 +56,9 @@ export class BuyerEntity {
 
   @BeforeInsert()
   generateId() {
-    // Custom ID generation logic
+    // Generate UUID for uniqueId field
+    this.uniqueId = uuidv4();
+    // Custom ID generation logic for numeric id
     this.id = Date.now() + Math.floor(Math.random() * 1000);
   }
 }

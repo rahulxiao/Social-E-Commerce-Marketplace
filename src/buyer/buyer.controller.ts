@@ -46,6 +46,11 @@ export class BuyerController {
         return this.buyerService.getBuyerById(id);
     }
 
+    @Get('getByUuid/:uniqueId')
+    getBuyerByUniqueId(@Param('uniqueId') uniqueId: string) {
+        return this.buyerService.getBuyerByUniqueId(uniqueId);
+    }
+
     @Put('update/:id')
     updateBuyer(@Param('id') id: number, @Body() updateBuyerDto: UpdateBuyerDto) {
         return this.buyerService.updateBuyer(id, updateBuyerDto);

@@ -118,6 +118,18 @@ export class BuyerService {
         };
     }
 
+    async getBuyerByUniqueId(uniqueId: string) {
+        const buyer = await this.buyerRepository.findOne({ where: { uniqueId } });
+        if (!buyer) {
+            throw new NotFoundException(`Buyer with UUID ${uniqueId} not found`);
+        }
+        
+        return {
+            message: "Buyer retrieved successfully by UUID",
+            data: buyer
+        };
+    }
+
     async getAllBuyers() {
         const buyers = await this.buyerRepository.find();
         return {

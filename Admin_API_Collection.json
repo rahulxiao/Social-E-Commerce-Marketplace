@@ -7,10 +7,10 @@
 	},
 	"item": [
 		{
-			"name": "User Category 4 - Required Operations",
+			"name": "User Category",
 			"item": [
 				{
-					"name": "Create Admin (User Category 4)",
+					"name": "Create Admin",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -33,7 +33,7 @@
 								"create"
 							]
 						},
-						"description": "Create admin with User Category 4 fields (uniqueId auto-generated, joiningDate, country)"
+						"description": "Create admin with User Category  fields (uniqueId auto-generated, joiningDate, country)"
 					},
 					"response": []
 				},

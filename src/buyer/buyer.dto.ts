@@ -6,9 +6,16 @@ import {
   IsOptional,
   Matches,
   IsBoolean,
+  IsUUID,
+  IsNumber,
+  IsPositive,
 } from 'class-validator';
 
 export class CreateBuyerDto {
+  @IsOptional()
+  @IsUUID()
+  uniqueId?: string;
+
   @IsOptional()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
@@ -17,11 +24,9 @@ export class CreateBuyerDto {
   fullName?: string;
 
   @IsNotEmpty()
-  @IsString()
-  @Matches(/^01\d+$/, {
-    message: 'Phone number must start with "01" and contain only digits',
-  })
-  phone: string;
+  @IsNumber()
+  @IsPositive()
+  phone: number;
 
   @IsEmail()
   @IsNotEmpty()
@@ -46,6 +51,10 @@ export class CreateBuyerDto {
 
 export class UpdateBuyerDto {
   @IsOptional()
+  @IsUUID()
+  uniqueId?: string;
+
+  @IsOptional()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
     message: 'Full name must only contain letters and spaces (no numbers allowed)',
@@ -53,11 +62,9 @@ export class UpdateBuyerDto {
   fullName?: string;
 
   @IsOptional()
-  @IsString()
-  @Matches(/^01\d+$/, {
-    message: 'Phone number must start with "01" and contain only digits',
-  })
-  phone?: string;
+  @IsNumber()
+  @IsPositive()
+  phone?: number;
 
   @IsOptional()
   @IsEmail()
@@ -82,9 +89,7 @@ export class UpdateBuyerDto {
 
 export class UpdatePhoneDto {
   @IsNotEmpty()
-  @IsString()
-  @Matches(/^01\d+$/, {
-    message: 'Phone number must start with "01" and contain only digits',
-  })
-  phone: string;
+  @IsNumber()
+  @IsPositive()
+  phone: number;
 }
