@@ -1,38 +1,22 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Matches,
-  MinLength,
-  IsOptional,
-  IsDateString,
-} from 'class-validator';
+import {Column,Entity,PrimaryGeneratedColumn,CreateDateColumn,UpdateDateColumn,BeforeInsert,} from 'typeorm';
+import {IsEmail,IsNotEmpty,IsString, Matches,MinLength,IsOptional,IsBoolean,} from 'class-validator';
 
 @Entity('buyer')
 export class BuyerEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 100 })
-  @IsNotEmpty()
+  @Column({ type: 'boolean', default: true })
+  @IsBoolean()
+  isActive: boolean;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  @IsOptional()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message: 'Name must only contain letters and spaces (no numbers allowed)',
+    message: 'Full name must only contain letters and spaces (no numbers allowed)',
   })
-  bname: string;
-
-  @Column({ type: 'varchar', length: 255, unique: true })
-  @IsEmail()
-  @IsNotEmpty()
-  bemail: string;
+  fullName?: string;
 
   @Column({ type: 'varchar', length: 20 })
   @IsNotEmpty()
@@ -40,7 +24,12 @@ export class BuyerEntity {
   @Matches(/^01\d+$/, {
     message: 'Phone number must start with "01" and contain only digits',
   })
-  bphone: string;
+  phone: string;
+
+  @Column({ type: 'varchar', length: 255, unique: true })
+  @IsEmail()
+  @IsNotEmpty()
+  bemail: string;
 
   @Column({ type: 'varchar', length: 50, unique: true })
   @IsNotEmpty()
@@ -54,10 +43,6 @@ export class BuyerEntity {
   @Matches(/.*[a-z].*/, {
     message: 'Password must contain at least one lowercase letter',
   })
-  @Matches(/.*[@#$&].*/, {
-    message:
-      'Password must contain at least one special character (@, #, $, or &)',
-  })
   bpassword: string;
 
   @CreateDateColumn()
@@ -65,4 +50,10 @@ export class BuyerEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  generateId() {
+    // Custom ID generation logic
+    this.id = Date.now() + Math.floor(Math.random() * 1000);
+  }
 }

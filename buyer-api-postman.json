@@ -1,0 +1,542 @@
+{
+  "info": {
+    "name": "Buyer API Collection",
+    "description": "Complete API collection for Buyer operations including User Category 2 requirements with phone validation (must start with 01)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3333",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "User Category 2 - Required Operations",
+      "item": [
+        {
+          "name": "Create Buyer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Update Phone Number",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"01987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/updatePhone/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "updatePhone", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Buyers with Null FullName",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/nullFullName",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "nullFullName"]
+            }
+          },
+          "description": "Retrieve all buyers who have null values in the fullName column"
+        },
+        {
+          "name": "Create Buyer with Null FullName",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"01123456789\",\n  \"bemail\": \"null.name@example.com\",\n  \"busername\": \"nullnameuser\",\n  \"bpassword\": \"password123\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          },
+          "description": "Create a buyer without providing fullName (should be null)"
+        },
+        {
+          "name": "Create Buyer with Empty FullName",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"\",\n  \"phone\": \"01123456790\",\n  \"bemail\": \"empty.name@example.com\",\n  \"busername\": \"emptynameuser\",\n  \"bpassword\": \"password123\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          },
+          "description": "Create a buyer with empty fullName string (should be stored as null)"
+        },
+        {
+          "name": "Remove Buyer by ID",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/remove/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "remove", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "General Buyer Operations",
+      "item": [
+        {
+          "name": "Get All Buyers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "all"]
+            }
+          }
+        },
+        {
+          "name": "Get Buyer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/get/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "get", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Buyer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"phone\": \"01555555555\",\n  \"bemail\": \"jane.doe@example.com\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/update/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "update", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "File Upload Operations",
+      "item": [
+        {
+          "name": "Upload PDF File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "upload"]
+            }
+          }
+        },
+        {
+          "name": "Get Uploaded File",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/getfile/filename.pdf",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "getfile", "filename.pdf"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legacy Endpoints",
+      "item": [
+        {
+          "name": "Get Buyer Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/getBuyerInfo",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "getBuyerInfo"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer (Legacy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/createBuyer",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "createBuyer"]
+            }
+          }
+        },
+        {
+          "name": "Update Buyer (Legacy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"phone\": \"01555555555\",\n  \"bemail\": \"jane.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/updateBuyer",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "updateBuyer"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation Test Cases",
+      "item": [
+        {
+          "name": "Create Buyer - Valid Phone (starts with 01)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Invalid Phone (doesn't start with 01)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Invalid Phone (with letters)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01abc12345\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Name with Special Characters",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John@Doe#123\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Password Too Short",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Password Without Lowercase",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"john.doe@example.com\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"PASSWORD123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Invalid Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"phone\": \"01123456789\",\n  \"bemail\": \"invalid-email\",\n  \"busername\": \"johndoe123\",\n  \"bpassword\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Buyer - Missing Required Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/buyer/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "create"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Social Features",
+      "item": [
+        {
+          "name": "Create Post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/createPost",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "createPost"]
+            }
+          }
+        },
+        {
+          "name": "Get Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/getPosts",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "getPosts"]
+            }
+          }
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/deletePost/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "deletePost", "1"]
+            }
+          }
+        },
+        {
+          "name": "Like Post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/likePost/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "likePost", "1"]
+            }
+          }
+        },
+        {
+          "name": "Unlike Post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/unlikePost/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "unlikePost", "1"]
+            }
+          }
+        },
+        {
+          "name": "Follow Buyer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/follow/2",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "follow", "2"]
+            }
+          }
+        },
+        {
+          "name": "Unfollow Buyer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buyer/unfollow/2",
+              "host": ["{{baseUrl}}"],
+              "path": ["buyer", "unfollow", "2"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

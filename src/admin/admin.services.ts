@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { AdminEntity } from './admin.entity';
-import { CreateAdminDto, UpdateAdminDto } from './admin.dto';
+import { CreateAdminDto, UpdateAdminDto, UpdateCountryDto } from './admin.dto';
 
 @Injectable()
 export class AdminService {
@@ -11,23 +11,7 @@ export class AdminService {
     private readonly adminRepository: Repository<AdminEntity>,
   ) {}
 
-  async getAdminInfo() {
-    try {
-      const admins = await this.adminRepository.find();
-      return {
-        success: true,
-        message: 'Admin information retrieved successfully',
-        data: admins,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: 'Failed to retrieve admin information',
-        error: error.message,
-      };
-    }
-  }
-
+  // Create a user
   async createAdmin(adminData: CreateAdminDto) {
     try {
       // Convert dateOfBirth string to Date if provided
@@ -49,6 +33,121 @@ export class AdminService {
       return {
         success: false,
         message: 'Failed to create admin',
+        error: error.message,
+      };
+    }
+  }
+
+  // Modify the country of an existing user
+  async updateCountry(id: number, updateCountryDto: UpdateCountryDto) {
+    try {
+      const admin = await this.adminRepository.findOne({ where: { id } });
+      if (!admin) {
+        throw new NotFoundException(`Admin with ID ${id} not found`);
+      }
+
+      admin.country = updateCountryDto.country;
+      const updatedAdmin = await this.adminRepository.save(admin);
+      
+      return {
+        success: true,
+        message: 'Country updated successfully',
+        data: updatedAdmin,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to update country',
+        error: error.message,
+      };
+    }
+  }
+
+  // Retrieve users by their joining date
+  async getAdminsByJoiningDate(joiningDate: Date) {
+    try {
+      // Create start and end of the day for the given date
+      const startOfDay = new Date(joiningDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      
+      const endOfDay = new Date(joiningDate);
+      endOfDay.setHours(23, 59, 59, 999);
+      
+      const admins = await this.adminRepository.find({
+        where: { 
+          joiningDate: Between(startOfDay, endOfDay)
+        }
+      });
+      
+      return {
+        success: true,
+        message: `Admins retrieved by joining date ${joiningDate.toDateString()} successfully`,
+        count: admins.length,
+        data: admins,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to retrieve admins by joining date',
+        error: error.message,
+      };
+    }
+  }
+
+  // Retrieve users with the default country value ('Unknown')
+  async getAdminsWithDefaultCountry() {
+    try {
+      const admins = await this.adminRepository.find({
+        where: { country: 'Unknown' }
+      });
+      
+      return {
+        success: true,
+        message: 'Admins with default country retrieved successfully',
+        count: admins.length,
+        data: admins,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to retrieve admins with default country',
+        error: error.message,
+      };
+    }
+  }
+
+  // Additional methods for general operations
+  async getAllAdmins() {
+    try {
+      const admins = await this.adminRepository.find();
+      return {
+        success: true,
+        message: 'All admins retrieved successfully',
+        count: admins.length,
+        data: admins,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to retrieve all admins',
+        error: error.message,
+      };
+    }
+  }
+
+  // Legacy methods for compatibility
+  async getAdminInfo() {
+    try {
+      const admins = await this.adminRepository.find();
+      return {
+        success: true,
+        message: 'Admin information retrieved successfully',
+        data: admins,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to retrieve admin information',
         error: error.message,
       };
     }

@@ -1,12 +1,55 @@
-import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res } from "@nestjs/common";
+import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res, Body, HttpException, HttpStatus, Put, ValidationPipe } from "@nestjs/common";
 import { BuyerService } from "./buyer.services";
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MulterError } from 'multer';
-import { diskStorage } from 'multer';
+import { MulterError, diskStorage } from 'multer';
+import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto } from './buyer.dto';
 
 @Controller('buyer')
 export class BuyerController {
     constructor(private readonly buyerService: BuyerService) {}
+
+    @Post('create')
+    createBuyer(@Body(ValidationPipe) createBuyerDto: CreateBuyerDto) {
+        return this.buyerService.createBuyer(createBuyerDto);
+    }
+
+    @Put('updatePhone/:id')
+    updatePhone(@Param('id') id: number, @Body(ValidationPipe) updatePhoneDto: UpdatePhoneDto) {
+        return this.buyerService.updatePhone(id, updatePhoneDto);
+    }
+
+    @Get('nullFullName')
+    async getBuyersWithNullFullName() {
+        try {
+            return await this.buyerService.getBuyersWithNullFullName();
+        } catch (error) {
+            return {
+                success: false,
+                message: "Failed to retrieve buyers with null full name",
+                error: error.message
+            };
+        }
+    }
+
+    @Delete('remove/:id')
+    removeBuyer(@Param('id') id: number) {
+        return this.buyerService.removeBuyer(id);
+    }
+
+    @Get('all')
+    getAllBuyers() {
+        return this.buyerService.getAllBuyers();
+    }
+
+    @Get('get/:id')
+    getBuyerById(@Param('id') id: number) {
+        return this.buyerService.getBuyerById(id);
+    }
+
+    @Put('update/:id')
+    updateBuyer(@Param('id') id: number, @Body() updateBuyerDto: UpdateBuyerDto) {
+        return this.buyerService.updateBuyer(id, updateBuyerDto);
+    }
 
     @Get('getBuyerInfo')
     getBuyerInfo() {
@@ -14,8 +57,14 @@ export class BuyerController {
     }
 
     @Post('createBuyer')
-    createBuyer() {
-        return this.buyerService.createBuyer();
+    createBuyerLegacy(@Body() createBuyerDto: CreateBuyerDto) {
+        return this.buyerService.createBuyer(createBuyerDto);
+    }
+
+    @Post('updateBuyer')
+    updateBuyerLegacy(@Body() updateBuyerDto: UpdateBuyerDto) {
+       
+        return this.buyerService.updateBuyer(1, updateBuyerDto); 
     }
 
     @Delete('deleteBuyer')
@@ -60,23 +109,55 @@ export class BuyerController {
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', {
-        fileFilter: (req, file, cb) => {
-            if (file.originalname.match(/^.*\.pdf$/)) {
-                cb(null, true);
-            } else {
-                cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'pdf'), false);
-            }
-        },
-        limits: { fileSize: 500000 }, 
         storage: diskStorage({
             destination: './uploads',
             filename: (req, file, cb) => {
-                cb(null, Date.now() + file.originalname);
+                const uniqueName = Date.now() + '-' + file.originalname;
+                cb(null, uniqueName);
             },
         }),
+        fileFilter: (req, file, cb) => {
+            if (!file) {
+                return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'No file uploaded'), false);
+            }
+            
+            const isPdfExtension = file.originalname.toLowerCase().endsWith('.pdf');
+            if (!isPdfExtension) {
+                return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'Only PDF files are allowed'), false);
+            }
+            
+            const isPdfMimeType = file.mimetype === 'application/pdf';
+            if (!isPdfMimeType) {
+                return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'Invalid file type. Only PDF files are allowed'), false);
+            }
+            
+            cb(null, true);
+        },
+        limits: { 
+            fileSize: 500000, // 500KB
+            files: 1 // Only allow 1 file
+        }
     }))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-        return this.buyerService.uploadFile(file);
+        try {
+            if (!file) {
+                throw new HttpException('No file uploaded. Please select a PDF file.', HttpStatus.BAD_REQUEST);
+            }
+            
+            const isPdfExtension = file.originalname.toLowerCase().endsWith('.pdf');
+            const isPdfMimeType = file.mimetype === 'application/pdf';
+            
+            if (!isPdfExtension || !isPdfMimeType) {
+                throw new HttpException('Only PDF files are allowed', HttpStatus.BAD_REQUEST);
+            }
+            
+            return this.buyerService.uploadFile(file);
+        } catch (error) {
+            if (error instanceof MulterError) {
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+            }
+            throw error;
+        }
     }
 
     @Get('getfile/:name')
@@ -84,3 +165,4 @@ export class BuyerController {
         res.sendFile(name, { root: './uploads' });
     }
 }
+

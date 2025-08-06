@@ -10,8 +10,8 @@ This is a social e-commerce marketplace backend API built using NestJS framework
 
 The project follows a modular architecture with separate modules for different functionalities:
 
-- **Admin Module**: Handles administrative functions (user management, platform oversight, etc.)
-- **Buyer Module**: Manages customer operations (viewing products, making purchases, social features)
+- **Admin Module**: Handles administrative functions with User Category 4 requirements (✅ Complete)
+- **Buyer Module**: Manages customer operations with User Category 2 & 3 requirements (✅ Complete)
 - **Seller Module**: Handles seller operations (product management, inventory, etc.)
 - **Product Module**: Manages product catalog and inventory
 - **Cart Module**: Handles shopping cart operations
@@ -21,16 +21,18 @@ The project follows a modular architecture with separate modules for different f
 
 ```
 src/
-├── admin/                 # Admin module (✅ Complete)
-│   ├── admin.entity.ts    # Database entity with validation
-│   ├── admin.controller.ts
-│   ├── admin.services.ts
-│   ├── admin.dto.ts       # Data transfer objects
-│   └── admin.module.ts
-├── buyer/                 # Buyer module (🔄 Basic implementation)
-│   ├── buyer.controller.ts
-│   ├── buyer.services.ts
-│   └── buyer.module.ts
+├── admin/                 # Admin module (✅ Complete with User Category 4)
+│   ├── admin.entity.ts    # Database entity with UUID generation, validation
+│   ├── admin.controller.ts # RESTful endpoints with validation
+│   ├── admin.services.ts  # Business logic with TypeORM integration
+│   ├── admin.dto.ts       # Data transfer objects with validation
+│   └── admin.module.ts    # Module configuration
+├── buyer/                 # Buyer module (✅ Complete with User Category 2 & 3)
+│   ├── buyer.entity.ts    # Database entity with custom ID generation
+│   ├── buyer.controller.ts # RESTful endpoints with file upload
+│   ├── buyer.services.ts  # Business logic with TypeORM integration
+│   ├── buyer.dto.ts       # Data transfer objects with validation
+│   └── buyer.module.ts    # Module configuration
 ├── seller/                # Seller module (🔄 Basic implementation)
 │   ├── seller.controller.ts
 │   ├── seller.services.ts
@@ -48,7 +50,7 @@ src/
 │   ├── order.service.ts
 │   └── order.module.ts
 ├── app.module.ts          # Main application module
-└── main.ts               # Application entry point
+└── main.ts               # Application entry point with global validation
 ```
 
 ## 🛠️ Technology Stack
@@ -58,7 +60,9 @@ src/
 - **Runtime**: Node.js v22.17.0
 - **Database**: PostgreSQL with TypeORM
 - **Package Manager**: npm
-- **Validation**: class-validator
+- **Validation**: class-validator with global ValidationPipe
+- **File Upload**: Multer with PDF validation
+- **UUID Generation**: uuid library
 - **Testing**: Jest
 - **Code Quality**: ESLint, Prettier
 
@@ -86,8 +90,13 @@ cd social-e-commerce-marketplace
 npm install
 ```
 
-3. Configure database:
-   - Create a PostgreSQL database named `greenguest`
+3. Install additional dependencies:
+```bash
+npm install uuid @types/uuid
+```
+
+4. Configure database:
+   - Create a PostgreSQL database named `trendora`
    - Update database credentials in `src/app.module.ts` if needed
 
 ### Running the Application
@@ -128,27 +137,31 @@ npm run test:watch
 
 ## 🌐 API Endpoints
 
-### Admin Endpoints (✅ Complete with Database Integration)
-- `GET /admin/getAdminInfo` - Get all admin information
-- `POST /admin/createAdmin` - Create a new admin
+### Admin Endpoints (✅ Complete with User Category 4)
+- `POST /admin/create` - Create a new admin with UUID generation
+- `PUT /admin/updateCountry/:id` - Update admin country
+- `GET /admin/byJoiningDate?date=YYYY-MM-DD` - Get admins by joining date
+- `GET /admin/defaultCountry` - Get admins with default country ('Unknown')
+- `GET /admin/all` - Get all admins
+- `GET /admin/getAdminInfo` - Get all admin information (Legacy)
+- `POST /admin/createAdmin` - Create admin (Legacy)
 - `GET /admin/getAdminById/:id` - Get admin by ID
 - `PUT /admin/updateAdmin/:id` - Update admin information
-- `DELETE /admin/deleteAdmin` - Delete all admins
 - `DELETE /admin/deleteAdminById/:id` - Delete admin by ID
-- `POST /admin/addAdminBody` - Test endpoint for admin creation
-- `GET /admin/getAdminInfoByNameAndId` - Get admin by name and ID
 
-### Buyer Endpoints (🔄 Basic Implementation)
-- `GET /user/getUserInfo` - Get user information
-- `POST /user/createUser` - Create a new user
-- `DELETE /user/deleteUser` - Delete a user
-- `POST /user/createPost` - Create a social post
-- `GET /user/getPosts` - Get all posts
-- `DELETE /user/deletePost/:postId` - Delete a post
-- `POST /user/likePost/:postId` - Like a post
-- `POST /user/unlikePost/:postId` - Unlike a post
-- `POST /user/follow/:userId` - Follow a user
-- `POST /user/unfollow/:userId` - Unfollow a user
+### Buyer Endpoints (✅ Complete with User Category 2 & 3)
+- `POST /buyer/create` - Create a new buyer with custom ID generation
+- `PUT /buyer/updatePhone/:id` - Update buyer phone number
+- `GET /buyer/nullFullName` - Get buyers with null full name
+- `DELETE /buyer/remove/:id` - Remove buyer by ID
+- `GET /buyer/all` - Get all buyers
+- `GET /buyer/get/:id` - Get buyer by ID
+- `PUT /buyer/update/:id` - Update buyer information
+- `POST /buyer/upload` - Upload PDF file (PDF validation)
+- `GET /buyer/getfile/:name` - Get uploaded file
+- `GET /buyer/getBuyerInfo` - Get buyer information (Legacy)
+- `POST /buyer/createBuyer` - Create buyer (Legacy)
+- `POST /buyer/updateBuyer` - Update buyer (Legacy)
 
 ### Seller Endpoints (🔄 Basic Implementation)
 - `GET /seller/getSellerInfo` - Get seller information
@@ -206,29 +219,40 @@ PORT=3333 npm run start:dev
 ## 🏗️ Development Status
 
 ### ✅ Completed
-- **Admin Module**: Full CRUD operations with database integration
-  - Entity with validation decorators
-  - Service with TypeORM integration
-  - Controller with RESTful endpoints
-  - DTOs for request validation
-  - Database table creation and data persistence
-- Basic NestJS project setup
-- Modular architecture implementation
-- Development environment configuration
-- Database integration with PostgreSQL
-- TypeORM configuration with auto-synchronization
+
+#### **Admin Module (User Category 4)**
+- **Entity**: Complete with UUID generation, joining date, country fields
+- **Validation**: Name (letters only), email, phone, password requirements
+- **Operations**: Create, update country, retrieve by joining date, get default country
+- **Features**: Auto-generated UUID, timestamp joining date, default country value
+- **Database Integration**: Full TypeORM integration with PostgreSQL
+
+#### **Buyer Module (User Category 2 & 3)**
+- **Entity**: Complete with custom ID generation, nullable full name, phone validation
+- **Validation**: 
+  - Name (no special characters)
+  - Password (min 6 chars, one lowercase)
+  - Phone (must start with "01")
+  - File upload (PDF only)
+- **Operations**: Create, update phone, retrieve null full names, remove by ID
+- **Features**: Custom ID generation, file upload with PDF validation
+- **Database Integration**: Full TypeORM integration with PostgreSQL
+
+#### **Core Infrastructure**
+- **Global Validation**: ValidationPipe with whitelist and transform options
+- **File Upload**: Multer integration with PDF validation
+- **Error Handling**: Comprehensive error handling with try-catch blocks
+- **Database Integration**: TypeORM with PostgreSQL and auto-synchronization
+- **Modular Architecture**: Clean separation of concerns
 
 ### 🔄 In Progress
-- **Buyer Module**: Basic CRUD operations (needs database integration)
 - **Seller Module**: Basic CRUD operations (needs database integration)
 - **Product Module**: Basic CRUD operations (needs database integration)
 - **Cart Module**: Basic implementation (needs database integration)
 - **Order Module**: Basic implementation (needs database integration)
 
 ### 📋 Planned Features
-- **Database Integration**: Complete TypeORM entities for all modules
 - **Authentication and Authorization**: JWT-based authentication
-- **Data Validation**: Complete DTO validation for all modules
 - **Social Features**: Enhanced social interactions
 - **Product Management**: Complete product catalog system
 - **Order Processing**: Full order lifecycle management
@@ -246,20 +270,38 @@ PORT=3333 npm run start:dev
 ```sql
 CREATE TABLE admin (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
+    uniqueId VARCHAR(150) UNIQUE NOT NULL, -- Auto-generated UUID
+    name VARCHAR(100) NOT NULL, -- Letters and spaces only
+    email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20) NOT NULL,
-    address TEXT NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    role VARCHAR(50) DEFAULT 'admin',
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    address VARCHAR(200) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL, -- Letters, numbers, underscore only
+    password VARCHAR(100) NOT NULL, -- Min 6 chars, one lowercase, one special char
+    joiningDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    country VARCHAR(30) DEFAULT 'Unknown',
+    dateOfBirth DATE NOT NULL,
+    socialMediaLink VARCHAR(200) NOT NULL, -- GitHub, Facebook, LinkedIn, Twitter only
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Buyer Table (✅ Implemented)
+```sql
+CREATE TABLE buyer (
+    id BIGINT PRIMARY KEY, -- Custom generated ID
+    isActive BOOLEAN DEFAULT true,
+    fullName VARCHAR(100) NULL, -- Nullable, letters and spaces only
+    phone VARCHAR(20) NOT NULL, -- Must start with "01"
+    bemail VARCHAR(255) UNIQUE NOT NULL,
+    busername VARCHAR(50) UNIQUE NOT NULL,
+    bpassword VARCHAR(255) NOT NULL, -- Min 6 chars, one lowercase
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 ### Planned Tables
-- **buyer**: Customer information and preferences
 - **seller**: Seller information and store details
 - **product**: Product catalog with categories
 - **cart**: Shopping cart items
@@ -268,26 +310,80 @@ CREATE TABLE admin (
 - **post**: Social posts and interactions
 - **review**: Product reviews and ratings
 
-## 🚀 Quick Start Example
+## 🚀 Quick Start Examples
 
-### Create an Admin
+### Create an Admin (User Category 4)
 ```bash
-curl -X POST http://localhost:3333/admin/createAdmin \
+curl -X POST http://localhost:3333/admin/create \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Admin User",
-    "email": "admin@example.com",
+    "name": "John Admin",
+    "email": "john.admin@example.com",
     "phone": "1234567890",
-    "address": "123 Admin St",
-    "username": "adminuser",
-    "password": "password123"
+    "address": "123 Admin Street, City, State 12345",
+    "username": "johnadmin",
+    "password": "admin@123",
+    "country": "USA",
+    "dateOfBirth": "1990-05-15",
+    "socialMediaLink": "https://github.com/johnadmin"
   }'
 ```
 
-### Get All Admins
+### Create a Buyer (User Category 2)
 ```bash
-curl -X GET http://localhost:3333/admin/getAdminInfo
+curl -X POST http://localhost:3333/buyer/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullName": "John Doe",
+    "phone": "01123456789",
+    "bemail": "john.doe@example.com",
+    "busername": "johndoe123",
+    "bpassword": "password123",
+    "isActive": true
+  }'
 ```
+
+### Get Buyers with Null Full Name
+```bash
+curl -X GET http://localhost:3333/buyer/nullFullName
+```
+
+### Get Admins by Joining Date
+```bash
+curl -X GET "http://localhost:3333/admin/byJoiningDate?date=2024-01-01"
+```
+
+## 📋 Validation Rules
+
+### Admin Validation (User Category 4)
+- **Name**: Letters and spaces only (no numbers or special characters)
+- **Username**: Letters, numbers, and underscores only (no special characters)
+- **Password**: Minimum 6 characters, one lowercase letter, one special character (@#$&)
+- **Social Media**: Only GitHub, Facebook, LinkedIn, or Twitter URLs allowed
+- **UniqueId**: Auto-generated UUID (v4) format
+- **Joining Date**: Auto-generated timestamp
+- **Country**: Defaults to 'Unknown'
+
+### Buyer Validation (User Category 2 & 3)
+- **Full Name**: Letters and spaces only (nullable, no special characters)
+- **Phone**: Must start with "01" and contain only digits
+- **Password**: Minimum 6 characters, at least one lowercase letter
+- **File Upload**: Only PDF files allowed (extension and MIME type validation)
+- **ID**: Custom generated using timestamp + random number
+
+## 📁 Postman Collections
+
+The project includes comprehensive Postman collections for testing:
+
+- **Admin_API_Collection.json**: Complete admin API testing with User Category 4 scenarios
+- **buyer-api-postman.json**: Complete buyer API testing with User Category 2 & 3 scenarios
+
+Both collections include:
+- Valid and invalid test cases
+- Error handling scenarios
+- File upload testing
+- Validation testing
+- Legacy endpoint compatibility
 
 ## 📄 License
 
