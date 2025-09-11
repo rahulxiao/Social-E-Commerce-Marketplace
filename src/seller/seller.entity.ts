@@ -1,6 +1,15 @@
-import {Column,Entity,PrimaryGeneratedColumn} from 'typeorm';
-import {IsEmail,IsNotEmpty,IsString,Matches,MinLength,IsInt,Min,IsIn} from 'class-validator';
-
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MinLength,
+  IsInt,
+  Min,
+  IsIn,
+} from 'class-validator';
+import { ProductEntity } from '../product/product.entity';
 @Entity('seller')
 export class SellerEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
@@ -10,8 +19,7 @@ export class SellerEntity {
   @IsNotEmpty()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message:
-      'Name must only contain letters and spaces (no numbers allowed)',
+    message: 'Name must only contain letters and spaces (no numbers allowed)',
   })
   name: string;
 
@@ -54,5 +62,6 @@ export class SellerEntity {
   })
   status: string;
 
-  
+  @OneToMany(() => ProductEntity, (p: ProductEntity) => p.seller, { cascade: true })
+  products: ProductEntity[];
 }

@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
+
+import { Injectable,BadRequestException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SellerEntity } from './seller.entity';
@@ -10,7 +12,7 @@ export class SellerService {
   constructor(
     @InjectRepository(SellerEntity)
     private sellerRepository: Repository<SellerEntity>,
-  ) {}
+  ) { }
 
   async getSellerInfo() {
     try {
@@ -53,18 +55,40 @@ export class SellerService {
     }
   }
 
+
+
   async createSeller(dto: CreateSellerDto, file: Express.Multer.File) {
+    // check if email already exists
+    const existingEmail = await this.sellerRepository.findOne({ where: { email: dto.email } });
+    if (existingEmail) {
+      throw new ConflictException('Email already in use');
+    }
+
+    // check if NID already exists
+    const existingNid = await this.sellerRepository.findOne({ where: { nidNumber: dto.nidNumber } });
+    if (existingNid) {
+      throw new ConflictException('NID number already in use');
+    }
+
+    // hash password
+    let hashedPassword: string | undefined = undefined;
+    if (dto.password) {
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(dto.password, salt);
+    }
+
+    // create seller entity
+    const seller = this.sellerRepository.create({
+      name: dto.name,
+      email: dto.email,
+      nidNumber: dto.nidNumber,
+      nidImage: file?.path || '', // safeguard if no file
+      age: dto.age,
+      status: dto.status || 'active',
+      password: hashedPassword,
+    });
+
     try {
-      const seller = this.sellerRepository.create({
-        name: dto.name,
-        email: dto.email,
-        nidNumber: dto.nidNumber,
-        nidImage: file.path,
-        age: dto.age,
-        status: dto.status || 'active',
-        // Add password only if it exists in CreateSellerDto
-        ...(dto.password && { password: dto.password }),
-      });
       const savedSeller = await this.sellerRepository.save(seller);
       return {
         success: true,
@@ -72,13 +96,11 @@ export class SellerService {
         data: savedSeller,
       };
     } catch (error) {
-      return {
-        success: false,
-        message: 'Failed to create seller',
-        error: error.message,
-      };
+      throw new BadRequestException(error.message || 'Failed to create seller');
     }
   }
+
+
 
   async getSellersAboveAge(age: number) {
     try {
@@ -167,6 +189,18 @@ export class SellerService {
         message: 'Failed to update seller',
         error: error.message,
       };
+    }
+  }
+
+  async findByEmail(email: string) {
+    try {
+      const seller = await this.sellerRepository.findOne({
+        where: { email },
+      });
+
+      return seller;
+    } catch (error) {
+      return null;
     }
   }
 

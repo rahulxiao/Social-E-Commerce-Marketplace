@@ -6,54 +6,71 @@ import {
   Post,
   Put,
   Query,
+  Body,
+  UseGuards,
+  Request,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
+import { ProductEntity } from './product.entity';
+import { AuthGuard } from '../auth/auth.guard'; //  existing guard
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post('createProduct')
-  createProduct() {
-    return this.productService.createProduct();
+  // -------------------- Create Product --------------------
+  @UseGuards(AuthGuard)
+  @Post('create')
+  createProduct(@Body() data: Partial<ProductEntity>, @Request() req) {
+    const sellerId = req.user.sub; // use sub from JWT payload
+    return this.productService.createProduct(data, sellerId);
   }
-  @Get('getProductInfo')
+
+  // -------------------- Get All Products --------------------
+  @Get('all')
   getProductInfo() {
     return this.productService.getProductInfo();
   }
-  @Get('/products')
-  browseProducts() {
-    return this.productService.browseProducts();
+
+
+
+  @Get('onlyseller/:id')
+  getonlysellername(@Param('id', ParseIntPipe) id: number) { 
+  
+    return this.productService.getOnlySellerName(id);
   }
-  @Get('getProductsByCategory/:category')
-  getProductsByCategory(
-    @Param('category') category: string,
-    @Query('sort') sort: string,
-    @Query('limit', ParseIntPipe) limit: number,
-    @Query('page', ParseIntPipe) page: number,
+
+
+ 
+//------------------- Get Product By ID --------------------
+  @Get(':id')
+  getProductById(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.getProductById(id);
+  }
+
+  // -------------------- Update Product --------------------
+  @UseGuards(AuthGuard)
+  @Put('update/:id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: Partial<ProductEntity>,
+    @Request() req,
   ) {
-    return this.productService.getProductsByCategory(
-      category,
-      sort,
-      limit,
-      page,
-    );
+    const sellerId = req.user.sub;
+    return this.productService.updateProduct(id, data, sellerId);
   }
-  @Get('getProductById/:id')
-  getProductById(@Param('id') id: string) {
-    return { message: `Product information for ID ${id}` };
+
+  // -------------------- Delete Product --------------------
+  @UseGuards(AuthGuard)
+  @Delete('delete/:id')
+  deleteProductById(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    const sellerId = req.user.sub;
+    return this.productService.deleteProductById(id, sellerId);
   }
-  @Delete('deleteProduct')
-  deleteProduct() {
-    return this.productService.deleteProduct();
-  }
-  @Put('updateProduct')
-  update(@Param('id') id: string) {
-    return { message: `Product with ID ${id} updated successfully` };
-  }
-  @Delete('deleteProductById/:id')
-  deleteProductById(@Param('id') id: string) {
-    return { message: `Product with ID ${id} deleted successfully` };
-  }
+
+  
+ 
+
+
 }

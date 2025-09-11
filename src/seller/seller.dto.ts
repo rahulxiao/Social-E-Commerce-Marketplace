@@ -8,6 +8,7 @@ import {
   IsPositive,
   IsString,
   Matches,
+  Min,
   MinLength,
   ValidateIf,
 } from 'class-validator';
@@ -35,9 +36,9 @@ export class CreateSellerDto {
   readonly nidNumber: string;
 
   @IsNotEmpty()
-  @Type(() => Number)
   @IsNumber()
   @IsPositive()
+  @Type(() => Number)
   age: number;
 
   @IsNotEmpty()
