@@ -1,5 +1,5 @@
 import {Column,Entity,PrimaryGeneratedColumn,CreateDateColumn,UpdateDateColumn,BeforeInsert,} from 'typeorm';
-import {IsEmail,IsNotEmpty,IsString, Matches,MinLength,IsOptional,IsBoolean,IsUUID,IsNumber,IsPositive,} from 'class-validator';
+import {IsEmail,IsNotEmpty,IsString, Matches,MinLength,MaxLength,IsOptional,IsBoolean,IsUUID,} from 'class-validator';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity('buyer')
@@ -15,38 +15,38 @@ export class BuyerEntity {
   @IsBoolean()
   isActive: boolean;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  @IsOptional()
+  @Column({ type: 'varchar', length: 100 })
+  @IsNotEmpty()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message: 'Full name must only contain letters and spaces (no numbers allowed)',
+    message: 'Full name must only contain letters and spaces',
   })
-  fullName?: string;
+  fullName: string;
 
-  @Column({ type: 'bigint', unsigned: true })
-  @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  phone: number;
-
-  @Column({ type: 'varchar', length: 255, unique: true })
-  @IsEmail()
-  @IsNotEmpty()
-  bemail: string;
-
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 11 })
   @IsNotEmpty()
   @IsString()
-  busername: string;
+  @Matches(/^01\d{9}$/, { message: 'Phone must start with 01 and be 11 digits' })
+  phone: string;
+
+  @Column({ type: 'varchar', length: 255, unique: true, nullable: true })
+  @IsEmail()
+  @IsOptional()
+  email: string;
 
   @Column({ type: 'varchar', length: 255 })
   @IsNotEmpty()
   @IsString()
-  @MinLength(6, { message: 'Password must be at least 6 characters long' })
-  @Matches(/.*[a-z].*/, {
-    message: 'Password must contain at least one lowercase letter',
-  })
-  bpassword: string;
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {message: 'password too weak'})
+  password: string;
+
+  // Optional stored path for uploaded PDF
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  @IsOptional()
+  @IsString()
+  pdfPath?: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

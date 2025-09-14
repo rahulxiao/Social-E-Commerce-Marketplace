@@ -3,46 +3,85 @@ import {
   IsNotEmpty,
   IsString,
   MinLength,
+  MaxLength,
   IsOptional,
   Matches,
   IsBoolean,
   IsUUID,
-  IsNumber,
-  IsPositive,
+  Validate,
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
 } from 'class-validator';
+
+// Simple password match validator
+@ValidatorConstraint({ name: 'MatchPassword', async: false })
+class MatchPasswordConstraint implements ValidatorConstraintInterface {
+  validate(value: any, args: ValidationArguments): boolean {
+    const password = (args.object as any).password;
+    return value === password;
+  }
+  defaultMessage(): string {
+    return 'Confirm password must match password';
+  }
+}
+
+// Validates an uploaded file is a PDF and <= 2MB
+@ValidatorConstraint({ name: 'IsPdfFile', async: false })
+class IsPdfFileConstraint implements ValidatorConstraintInterface {
+  validate(value: any): boolean {
+    if (!value) return true; // optional field handled by IsOptional
+    const file = value as Express.Multer.File;
+    const isPdf = file?.mimetype === 'application/pdf' || /\.pdf$/i.test(file?.originalname || '');
+    const maxBytes = 30 * 1024 * 1024;
+    const withinLimit = typeof file?.size === 'number' ? file.size <= maxBytes : true;
+    return Boolean(isPdf && withinLimit);
+  }
+  defaultMessage(): string {
+    return 'File must be a PDF not larger than 2MB';
+  }
+}
 
 export class CreateBuyerDto {
   @IsOptional()
   @IsUUID()
   uniqueId?: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message: 'Full name must only contain letters and spaces (no numbers allowed)',
+    message: 'Full name must only contain letters and spaces',
   })
-  fullName?: string;
+  fullName: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  phone: number;
+  @IsString()
+  @Matches(/^01\d{9}$/, {
+    message: 'Phone must start with 01 and be 11 digits',
+  })
+  phone: string;
 
   @IsEmail()
   @IsNotEmpty()
-  bemail: string;
+  email: string;
 
   @IsNotEmpty()
   @IsString()
-  busername: string;
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @MaxLength(20)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {message: 'password too weak'})
+  password: string;
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(6, { message: 'Password must be at least 6 characters long' })
-  @Matches(/.*[a-z].*/, {
-    message: 'Password must contain at least one lowercase letter',
-  })
-  bpassword: string;
+  @MinLength(8, { message: 'Confirm password must be at least 8 characters long' })
+  @MaxLength(20)
+  @Validate(MatchPasswordConstraint)
+  confirmPassword: string;
+
+  @IsOptional()
+  @Validate(IsPdfFileConstraint)
+  pdf?: Express.Multer.File;
 
   @IsOptional()
   @IsBoolean()
@@ -57,30 +96,28 @@ export class UpdateBuyerDto {
   @IsOptional()
   @IsString()
   @Matches(/^[A-Za-z\s]+$/, {
-    message: 'Full name must only contain letters and spaces (no numbers allowed)',
+    message: 'Full name must only contain letters and spaces',
   })
   fullName?: string;
 
   @IsOptional()
-  @IsNumber()
-  @IsPositive()
-  phone?: number;
+  @IsString()
+  @Matches(/^01\d{9}$/, {
+    message: 'Phone must start with 01 and be 11 digits',
+  })
+  phone?: string;
 
   @IsOptional()
   @IsEmail()
-  bemail?: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
-  busername?: string;
+  password?: string;
 
   @IsOptional()
-  @IsString()
-  @MinLength(6, { message: 'Password must be at least 6 characters long' })
-  @Matches(/.*[a-z].*/, {
-    message: 'Password must contain at least one lowercase letter',
-  })
-  bpassword?: string;
+  @Validate(IsPdfFileConstraint)
+  pdf?: Express.Multer.File;
 
   @IsOptional()
   @IsBoolean()
@@ -89,7 +126,9 @@ export class UpdateBuyerDto {
 
 export class UpdatePhoneDto {
   @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  phone: number;
+  @IsString()
+  @Matches(/^01\d{9}$/, {
+    message: 'Phone must start with 01 and be 11 digits',
+  })
+  phone: string;
 }

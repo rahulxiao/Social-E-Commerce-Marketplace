@@ -9,7 +9,28 @@ export class BuyerController {
     constructor(private readonly buyerService: BuyerService) {}
 
     @Post('create')
-    createBuyer(@Body(ValidationPipe) createBuyerDto: CreateBuyerDto) {
+    @UseInterceptors(FileInterceptor('file', {
+        fileFilter: (req, file, cb) => {
+            if (file.originalname.match(/^.*\.(pdf)$/)) {
+                cb(null, true);
+            } else {
+                cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'pdf'), false);
+            }
+        },
+        limits: { fileSize: 30 * 1024 * 1024 }, // 30MB
+        storage: diskStorage({
+            destination: './uploads',
+            filename: function (req, file, cb) {
+                cb(null, Date.now() + file.originalname);
+            },
+        })
+    }))
+    createBuyer(
+        @Body(ValidationPipe) createBuyerDto: CreateBuyerDto,
+        @UploadedFile() file: Express.Multer.File
+    ) {
+        // Add the file to the DTO
+        createBuyerDto.pdf = file;
         return this.buyerService.createBuyer(createBuyerDto);
     }
 
@@ -114,55 +135,23 @@ export class BuyerController {
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file', {
+        fileFilter: (req, file, cb) => {
+            if (file.originalname.match(/^.*\.(pdf)$/)) {
+                cb(null, true);
+            } else {
+                cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'pdf'), false);
+            }
+        },
+        limits: { fileSize: 30 * 1024 * 1024 },
         storage: diskStorage({
             destination: './uploads',
-            filename: (req, file, cb) => {
-                const uniqueName = Date.now() + '-' + file.originalname;
-                cb(null, uniqueName);
+            filename: function (req, file, cb) {
+                cb(null, Date.now() + file.originalname);
             },
-        }),
-        fileFilter: (req, file, cb) => {
-            if (!file) {
-                return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'No file uploaded'), false);
-            }
-            
-            const isPdfExtension = file.originalname.toLowerCase().endsWith('.pdf');
-            if (!isPdfExtension) {
-                return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'Only PDF files are allowed'), false);
-            }
-            
-            const isPdfMimeType = file.mimetype === 'application/pdf';
-            if (!isPdfMimeType) {
-                return cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'Invalid file type. Only PDF files are allowed'), false);
-            }
-            
-            cb(null, true);
-        },
-        limits: { 
-            fileSize: 500000, // 500KB
-            files: 1 // Only allow 1 file
-        }
+        })
     }))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
-        try {
-            if (!file) {
-                throw new HttpException('No file uploaded. Please select a PDF file.', HttpStatus.BAD_REQUEST);
-            }
-            
-            const isPdfExtension = file.originalname.toLowerCase().endsWith('.pdf');
-            const isPdfMimeType = file.mimetype === 'application/pdf';
-            
-            if (!isPdfExtension || !isPdfMimeType) {
-                throw new HttpException('Only PDF files are allowed', HttpStatus.BAD_REQUEST);
-            }
-            
-            return this.buyerService.uploadFile(file);
-        } catch (error) {
-            if (error instanceof MulterError) {
-                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-            }
-            throw error;
-        }
+        console.log(file);
     }
 
     @Get('getfile/:name')

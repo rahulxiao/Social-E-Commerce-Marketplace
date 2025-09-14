@@ -18,7 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: 'rahulxiao',
       database: 'trendora',
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: true,
     }),
     AuthModule,
     ProductModule,
