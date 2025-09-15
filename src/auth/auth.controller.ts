@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './login.dto';
-import { SignupDto } from './signup.dto';
+
 
 @Controller('auth')
 export class AuthController {
@@ -21,12 +21,5 @@ export class AuthController {
   sellerLogin(@Body() loginDto: LoginDto) {
     return this.authService.sellerLogin(loginDto.email, loginDto.password);
   }
-  @Post('seller/signup')
-  @UseInterceptors(FileInterceptor('file'))
-  sellerSignup(
-    @Body() signupDto: SignupDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.authService.sellerSignup(signupDto, file);
-  }
+ 
 }

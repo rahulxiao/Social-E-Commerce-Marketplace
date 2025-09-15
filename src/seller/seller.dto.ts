@@ -67,7 +67,7 @@ export class UpdateSellerDto {
 
   @IsOptional()
   @IsEmail({}, { message: 'Invalid email format' })
-  @Matches(/\.xyz$/, {
+  @Matches(/\.com$/, {
     message: 'Email must end with .xyz domain',
   })
   email?: string;
@@ -102,4 +102,7 @@ export class UpdateSellerDto {
     message: 'Status must be either "active" or "inactive"',
   })
   status: string;
+  @IsOptional()
+  @IsString()
+  nidImage?: string;
 }

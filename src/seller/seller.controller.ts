@@ -1,18 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Param,
-  Post,
-  Query,
-  Patch,
-  Get,
-  Put,
-  ParseIntPipe,
-  UseInterceptors,
-  UploadedFile,
-  UseGuards,
-} from '@nestjs/common';
+import {Body,Controller,Delete,Param,Post,Query,Patch,Get,Put,ParseIntPipe,UseInterceptors,UploadedFile,UseGuards,} from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { SellerService } from './seller.services';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -73,13 +59,34 @@ export class SellerController {
   }
 
   @UseGuards(AuthGuard)
-  @Put('updateSeller/:id')
-  async updateSeller(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateData: UpdateSellerDto,
-  ) {
-    return await this.sellerService.updateSeller(id, updateData);
-  }
+@Patch('updateSeller/:id')
+@UseInterceptors(
+  FileInterceptor('nidImage', {
+    storage: diskStorage({
+      destination: './uploads/nid',
+      filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, uniqueName + extname(file.originalname));
+      },
+    }),
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype.match(/^image\/(jpeg|jpg|png|webp)$/)) {
+        cb(null, true);
+      } else {
+        cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'nidImage'), false);
+      }
+    },
+  }),
+)
+async updateSeller(
+  @Param('id', ParseIntPipe) id: number,
+  @UploadedFile() file: Express.Multer.File,
+  @Body() dto: UpdateSellerDto,
+) {
+  return this.sellerService.updateSeller(id, dto, file);
+}
+
 
   /*@UseGuards(AuthGuard)
   @Get('getSellerInfoByNameAndId')
