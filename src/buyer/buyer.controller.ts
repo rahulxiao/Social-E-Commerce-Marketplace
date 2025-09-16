@@ -1,12 +1,33 @@
-import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res, Body, HttpException, HttpStatus, Put, ValidationPipe } from "@nestjs/common";
+import { Controller, Delete, Get, Post, Param, UploadedFile, UseInterceptors, Res, Body, HttpException, HttpStatus, Put, ValidationPipe, UseGuards, Request } from "@nestjs/common";
 import { BuyerService } from "./buyer.services";
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
-import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto } from './buyer.dto';
+import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto, BuyerProfileUpdateDto } from './buyer.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('buyer')
 export class BuyerController {
     constructor(private readonly buyerService: BuyerService) {}
+
+
+    // Profile
+    @UseGuards(AuthGuard)
+    @Get('me')
+    me(@Request() req) { return this.buyerService.getProfile(req.user.sub); }
+
+    @UseGuards(AuthGuard)
+    @Put('profile')
+    @UseInterceptors(FileInterceptor('avatar', {
+        storage: diskStorage({
+            destination: './uploads',
+            filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+        })
+    }))
+    updateProfile(
+        @Request() req,
+        @Body(ValidationPipe) dto: BuyerProfileUpdateDto,
+        @UploadedFile() avatar?: Express.Multer.File,
+    ) { return this.buyerService.updateProfile(req.user.sub, dto, avatar); }
 
     @Post('create')
     @UseInterceptors(FileInterceptor('file', {
@@ -29,7 +50,6 @@ export class BuyerController {
         @Body(ValidationPipe) createBuyerDto: CreateBuyerDto,
         @UploadedFile() file: Express.Multer.File
     ) {
-        // Add the file to the DTO
         createBuyerDto.pdf = file;
         return this.buyerService.createBuyer(createBuyerDto);
     }
@@ -47,7 +67,7 @@ export class BuyerController {
             return {
                 success: false,
                 message: "Failed to retrieve buyers with null full name",
-                error: error.message
+                error: (error as Error).message
             };
         }
     }

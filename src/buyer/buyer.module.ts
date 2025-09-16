@@ -5,7 +5,9 @@ import { BuyerService } from './buyer.services';
 import { BuyerEntity } from './buyer.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BuyerEntity])],
+  imports: [
+    TypeOrmModule.forFeature([BuyerEntity]),
+  ],
   controllers: [BuyerController],
   providers: [BuyerService],
   exports: [BuyerService],

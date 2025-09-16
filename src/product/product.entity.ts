@@ -3,10 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { SellerEntity } from '../seller/seller.entity';
+import { ReviewEntity } from '../review/review.entity';
 
 @Entity('product')
 export class ProductEntity {
@@ -31,14 +33,15 @@ export class ProductEntity {
   @Column({ type: 'boolean', default: true })
   inStock: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  image: string;
-
   // Relationship: Many Products belong to one Seller
   @ManyToOne(() => SellerEntity, (seller) => seller.products, {
     onDelete: 'CASCADE',
   })
   seller: SellerEntity;
+
+  // Relationship: One Product has many Reviews
+  @OneToMany(() => ReviewEntity, (review) => review.product)
+  reviews: ReviewEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,15 +1,61 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, ConflictException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, IsNull } from "typeorm";
-import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto } from "./buyer.dto";
+import { CreateBuyerDto, UpdateBuyerDto, UpdatePhoneDto, BuyerProfileUpdateDto } from "./buyer.dto";
 import { BuyerEntity } from "./buyer.entity";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class BuyerService {
     constructor(
         @InjectRepository(BuyerEntity)
-        private readonly buyerRepository: Repository<BuyerEntity>
+        private readonly buyerRepository: Repository<BuyerEntity>,
     ) {}
+
+    // Register buyer (used by AuthService)
+    async register(createBuyerDto: CreateBuyerDto) {
+        const hashed = await bcrypt.hash(createBuyerDto.password, 10);
+        const buyer = this.buyerRepository.create({
+            uniqueId: createBuyerDto.uniqueId,
+            fullName: createBuyerDto.fullName,
+            phone: createBuyerDto.phone,
+            email: createBuyerDto.email,
+            password: hashed,
+            isActive: createBuyerDto.isActive ?? true,
+            pdfPath: createBuyerDto.pdf ? createBuyerDto.pdf.filename : undefined,
+        });
+        const saved = await this.buyerRepository.save(buyer);
+        return { message: 'Registered successfully', data: { id: saved.id, uniqueId: saved.uniqueId, email: saved.email } };
+    }
+
+    // Auth helper method
+    async findByEmail(email: string) {
+        return await this.buyerRepository.findOne({ where: { email } });
+    }
+
+    // Profile
+    async getProfile(buyerId: number) {
+        const buyer = await this.buyerRepository.findOne({ where: { id: buyerId } });
+        if (!buyer) throw new NotFoundException('Buyer not found');
+        const { password, ...rest } = buyer as any;
+        return rest;
+    }
+
+    async updateProfile(buyerId: number, dto: BuyerProfileUpdateDto, avatarFile?: Express.Multer.File) {
+        const buyer = await this.buyerRepository.findOne({ where: { id: buyerId } });
+        if (!buyer) throw new NotFoundException('Buyer not found');
+        if (dto.email && dto.email !== buyer.email) {
+            const exists = await this.buyerRepository.findOne({ where: { email: dto.email } });
+            if (exists) throw new ConflictException('Email already in use');
+        }
+        if (avatarFile) {
+            buyer.avatarUrl = `/uploads/${avatarFile.filename}`;
+        }
+        Object.assign(buyer, dto);
+        const updated = await this.buyerRepository.save(buyer);
+        const { password, ...rest } = updated as any;
+        return rest;
+    }
 
     // Create a user
     async createBuyer(createBuyerDto: CreateBuyerDto) {
@@ -33,7 +79,7 @@ export class BuyerService {
             return {
                 success: false,
                 message: "Failed to create buyer",
-                error: error.message
+                error: (error as Error).message
             };
         }
     }
@@ -71,7 +117,7 @@ export class BuyerService {
             return {
                 success: false,
                 message: "Failed to retrieve buyers with null full name",
-                error: error.message
+                error: (error as Error).message
             };
         }
     }

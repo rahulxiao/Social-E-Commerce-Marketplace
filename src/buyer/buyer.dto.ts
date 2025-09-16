@@ -132,3 +132,34 @@ export class UpdatePhoneDto {
   })
   phone: string;
 }
+
+export class BuyerLoginDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+
+export class BuyerProfileUpdateDto {
+  @IsOptional()
+  @IsString()
+  fullName?: string;
+
+  @IsOptional()
+  @IsString()
+  @Matches(/^01\d{9}$/, {
+    message: 'Phone must start with 01 and be 11 digits',
+  })
+  phone?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  address?: string;
+}

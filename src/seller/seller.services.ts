@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 
-import { Injectable,BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable,BadRequestException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SellerEntity } from './seller.entity';
@@ -32,38 +32,28 @@ export class SellerService {
   }
 
   async getSellerById(id: number) {
-  try {
-    const seller = await this.sellerRepository.findOne({ where: { id } });
-
-    if (seller) {
-      if (seller.nidImage) {
-        // Replace backslashes with forward slashes
-        const normalizedPath = seller.nidImage.replace(/\\/g, '/');
-
-        // Prepend your server base URL
-        seller.nidImage = `http://localhost:3333/${normalizedPath}`;
-        
+    try {
+      const seller = await this.sellerRepository.findOne({ where: { id } });
+      if (seller) {
+        return {
+          success: true,
+          message: 'Seller found',
+          data: seller,
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Seller not found',
+        };
       }
-
-      return {
-        success: true,
-        message: 'Seller found',
-        data: seller,
-      };
-    } else {
+    } catch (error) {
       return {
         success: false,
-        message: 'Seller not found',
+        message: 'Failed to retrieve seller',
+        error: error.message,
       };
     }
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Failed to retrieve seller',
-      error: error.message,
-    };
   }
-}
 
 
 
@@ -175,38 +165,32 @@ export class SellerService {
     }
   }
 
- async updateSeller(id: number, dto: UpdateSellerDto, file?: Express.Multer.File) {
-  try {
-    const seller = await this.sellerRepository.findOne({ where: { id } });
-    if (!seller) {
-      throw new NotFoundException('Seller not found');
+  async updateSeller(id: number, updateData: UpdateSellerDto) {
+    try {
+      const result = await this.sellerRepository.update(id, updateData);
+      if (result.affected && result.affected > 0) {
+        const updatedSeller = await this.sellerRepository.findOne({
+          where: { id },
+        });
+        return {
+          success: true,
+          message: 'Seller updated successfully',
+          data: updatedSeller,
+        };
+      } else {
+        return {
+          success: false,
+          message: 'Seller not found',
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Failed to update seller',
+        error: error.message,
+      };
     }
-
-    // hash password if provided
-    if (dto.password) {
-      const salt = await bcrypt.genSalt(10);
-      dto.password = await bcrypt.hash(dto.password, salt);
-    }
-
-    // update only provided fields
-    if (file) {
-      dto.nidImage = file.path; // same as createSeller
-    }
-
-    Object.assign(seller, dto);
-
-    const updatedSeller = await this.sellerRepository.save(seller);
-
-    return {
-      success: true,
-      message: 'Seller updated successfully',
-      data: updatedSeller,
-    };
-  } catch (error) {
-    throw new BadRequestException(error.message || 'Failed to update seller');
   }
-}
-
 
   async findByEmail(email: string) {
     try {

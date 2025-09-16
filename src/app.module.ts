@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { CartModule } from './cart/cart.module';
+import { WishlistModule } from './wishlist/wishlist.module';
+import { ReviewModule } from './review/review.module';
+import { SocialModule } from './social/social.module';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { BuyerModule } from './buyer/buyer.module';
@@ -15,7 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'root',
+      password: 'rahulxiao',
       database: 'trendora',
       autoLoadEntities: true,
       synchronize: true,
@@ -24,6 +27,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ProductModule,
     CartModule,
     OrderModule,
+    WishlistModule,
+    ReviewModule,
+    SocialModule,
     AdminModule,
     BuyerModule,
     SellerModule,
