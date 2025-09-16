@@ -31,6 +31,9 @@ export class ProductEntity {
   @Column({ type: 'boolean', default: true })
   inStock: boolean;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image: string;
+
   // Relationship: Many Products belong to one Seller
   @ManyToOne(() => SellerEntity, (seller) => seller.products, {
     onDelete: 'CASCADE',
