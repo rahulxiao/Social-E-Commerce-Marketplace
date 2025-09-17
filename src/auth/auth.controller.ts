@@ -46,4 +46,18 @@ export class AuthController {
   ) {
     return this.authService.buyerSignup(createBuyerDto, file);
   }
+
+  // Buyer logout (stateless JWT). Frontend should delete token client-side.
+  @HttpCode(HttpStatus.OK)
+  @Post('buyer/logout')
+  buyerLogout() {
+    return { message: 'Logged out successfully' };
+  }
+
+  // Admin authentication endpoints
+  @HttpCode(HttpStatus.OK)
+  @Post('admin/login')
+  adminLogin(@Body() loginDto: LoginDto) {
+    return this.authService.adminLogin(loginDto.email, loginDto.password);
+  }
 }

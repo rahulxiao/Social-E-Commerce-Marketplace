@@ -6,11 +6,13 @@ import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
 import { SellerModule } from 'src/seller/seller.module';
 import { BuyerModule } from 'src/buyer/buyer.module';
+import { AdminModule } from 'src/admin/admin.module';
 
 @Module({
   imports: [
     SellerModule,
     forwardRef(() => BuyerModule),
+    AdminModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

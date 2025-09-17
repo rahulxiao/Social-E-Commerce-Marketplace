@@ -2,6 +2,7 @@
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { SellerService } from '../seller/seller.services';
 import { BuyerService } from '../buyer/buyer.services';
+import { AdminService } from '../admin/admin.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignupDto } from './signup.dto';
 import { CreateBuyerDto } from '../buyer/buyer.dto';
@@ -13,6 +14,7 @@ export class AuthService {
   constructor(
     private sellerService: SellerService,
     private buyerService: BuyerService,
+    private adminService: AdminService,
     private jwtService: JwtService
   ) {}
 
@@ -77,6 +79,33 @@ export class AuthService {
     
     if (file) createBuyerDto.pdf = file;
     return await this.buyerService.register(createBuyerDto);
+  }
+
+  // Admin authentication methods
+  async adminLogin(email: string, password: string): Promise<{ access_token: string; admin: any }> {
+    const admin = await this.adminService.findByEmail(email);
+    
+    if (!admin) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const payload = { sub: admin.id, role: 'admin', email: admin.email };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      admin: {
+        id: admin.id,
+        name: admin.name,
+        email: admin.email,
+        username: admin.username,
+        country: admin.country,
+        isVerified: admin.isVerified,
+      },
+    };
   }
 }
 

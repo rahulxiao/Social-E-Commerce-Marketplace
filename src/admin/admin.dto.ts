@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsString, IsOptional, IsDateString, Matches } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsOptional, IsDateString, Matches, MinLength } from 'class-validator';
 
 export class CreateAdminDto {
   @IsNotEmpty()
@@ -29,9 +29,7 @@ export class CreateAdminDto {
 
   @IsNotEmpty()
   @IsString()
-  @Matches(/^(?=.*[a-z])(?=.*[@#$&])/, {
-    message: 'Password must contain at least one lowercase letter and one special character (@#$&)',
-  })
+  @MinLength(6, { message: 'Password must be at least 6 characters long' })
   password: string;
 
   @IsOptional()
@@ -79,9 +77,7 @@ export class UpdateAdminDto {
 
   @IsOptional()
   @IsString()
-  @Matches(/^(?=.*[a-z])(?=.*[@#$&])/, {
-    message: 'Password must contain at least one lowercase letter and one special character (@#$&)',
-  })
+  @MinLength(6, { message: 'Password must be at least 6 characters long' })
   password?: string;
 
   @IsOptional()

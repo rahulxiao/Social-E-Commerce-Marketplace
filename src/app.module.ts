@@ -10,6 +10,10 @@ import { AuthModule } from './auth/auth.module';
 import { BuyerModule } from './buyer/buyer.module';
 import { SellerModule } from './seller/seller.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CustomMailerModule } from './mailer/mailer.module';
+
+import { SuperAdminModule } from './superadmin/superadmin.module';
+// import { EmailModule } from './email/email.module'; // Uncomment when enabling email
 
 @Module({
   imports: [
@@ -30,9 +34,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     WishlistModule,
     ReviewModule,
     SocialModule,
+    // EmailModule,
     AdminModule,
     BuyerModule,
     SellerModule,
+    SuperAdminModule,
+    CustomMailerModule,
   ],
 })
 export class AppModule {}

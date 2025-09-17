@@ -10,8 +10,9 @@ import {
   ParseIntPipe,
   ValidationPipe,
 } from '@nestjs/common';
-import { AdminService } from './admin.services';
+import { AdminService } from './admin.service';
 import { CreateAdminDto, UpdateAdminDto, UpdateCountryDto } from './admin.dto';
+import { SuperAdminController } from 'src/superadmin/superadmin.controller';
 
 @Controller('admin')
 export class AdminController {
@@ -60,6 +61,9 @@ export class AdminController {
     return await this.adminService.getAdminsWithDefaultCountry();
   }
 
+
+
+
   // Additional endpoints for general operations
   @Get('all')
   async getAllAdmins() {
@@ -100,6 +104,8 @@ export class AdminController {
     return await this.adminService.addAdminBody(name, id);
   }
 
+
+
   @Get('getAdminInfoByNameAndId')
   async getAdminByNameAndId(
     @Query('name') name: string,
@@ -107,4 +113,5 @@ export class AdminController {
   ) {
     return await this.adminService.getAdminByNameAndId(name, id);
   }
+
 }
